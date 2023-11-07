@@ -2,6 +2,7 @@ BINARY_NAME=bin/coffee-choose
 
 # Main
 build:
+	make deps-upgrade
 	make easyjson
 	go build -o ${BINARY_NAME} ./cmd
 
@@ -33,7 +34,6 @@ deps-upgrade:
 	go get github.com/mailru/easyjson && go install github.com/mailru/easyjson/...@latest
 	go get -u -t -d -v ./...
 	go mod tidy
-	go mod vendor
 
 deps-cleancache:
 	go clean -modcache
