@@ -35,7 +35,7 @@ type server interface {
 
 func makeServer(p makeServerParams) server {
 	httpServer := &http.Server{
-		Addr:           "localhost:" + p.Port,
+		Addr:           ":" + p.Port,
 		ReadTimeout:    time.Second * p.ReadTimeout,
 		WriteTimeout:   time.Second * p.WriteTimeout,
 		MaxHeaderBytes: maxHeaderBytes,
@@ -43,8 +43,8 @@ func makeServer(p makeServerParams) server {
 	}
 
 	log.Info().
-		Dict("port", zerolog.Dict().Str("data.addr", httpServer.Addr)).
-		Msg("server startup")
+		Dict("attr", zerolog.Dict().Str("port", httpServer.Addr[1:])).
+		Msg("Server startup")
 
 	return httpServer
 }
@@ -55,9 +55,7 @@ func makeStart(s server) Start {
 	return func(ctx context.Context, cancel context.CancelFunc) error {
 		defer cancel()
 		go func() {
-			if err := s.ListenAndServe(); err != nil {
-				log.Fatal().Msgf("Error starting Server: ", err)
-			}
+			_ = s.ListenAndServe()
 		}()
 
 		quit := make(chan os.Signal, 1)
@@ -65,9 +63,9 @@ func makeStart(s server) Start {
 
 		<-quit
 
-		log.Info().Msg("Server Exited Properly")
+		log.Info().Msg("Server exited properly")
 		if err := s.Shutdown(ctx); err != nil {
-			log.Fatal().Msgf("Server Shutdown Failed: ", err)
+			log.Fatal().Msgf("Server shutdown failed: ", err)
 		}
 
 		return nil

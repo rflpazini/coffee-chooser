@@ -1,9 +1,9 @@
-BINARY_NAME=bin/coffee-choose
+SERVICE_NAME=coffee-chooser
+BINARY_NAME=bin/$(SERVICE_NAME)
 
 # Main
-build:
-	make deps-upgrade
-	make easyjson
+build: easyjson
+	@echo Building $(BINARY_NAME)
 	go build -o ${BINARY_NAME} ./cmd
 
 run:
@@ -20,17 +20,16 @@ test:
 # ==============================================================================
 # Modules support
 
+deps:
+	go get github.com/mailru/easyjson && go install github.com/mailru/easyjson/...@latest
+	go install golang.org/x/tools/...@latest
+	go mod download
+
 deps-reset:
 	git checkout -- go.mod
 	go mod tidy
-	go mod vendor
-
-tidy:
-	go mod tidy
-	go mod vendor
 
 deps-upgrade:
-	# go get $(go list -f '{{if not (or .Main .Indirect)}}{{.Path}}{{end}}' -m all)
 	go get github.com/mailru/easyjson && go install github.com/mailru/easyjson/...@latest
 	go get -u -t -d -v ./...
 	go mod tidy
@@ -42,5 +41,6 @@ deps-cleancache:
 # Tools commands
 
 easyjson:
+	@echo Generating easyjson files...
 	go generate ./pkg/api/...
 	go generate ./pkg/config/...

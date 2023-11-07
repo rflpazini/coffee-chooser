@@ -1,8 +1,13 @@
 {
   "server": {
     "port": 8080,
-    "appName": "coffee-choose",
-    "appVersion": "0.0.1",
+    "appName": "coffee-chooser",
+    "appVersion": "v0.0.1",
     "repository": "https://github.com/rflpazini/coffee-chooser"
+  },
+  "mongo": {
+    "uri": "localhost",
+    "database": "coffee-chooser",
+    "timeout": 3000
   }
 }

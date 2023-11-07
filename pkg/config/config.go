@@ -6,9 +6,9 @@ import "time"
 // easyjson:json
 type Config struct {
 	Server *ServerConfig `json:"server"`
+	Mongo  *MongoConfig  `json:"mongo"`
 }
 
-// easyjson:json
 type ServerConfig struct {
 	AppName           string        `json:"appName"`
 	AppVersion        string        `json:"appVersion"`
@@ -24,4 +24,10 @@ type ServerConfig struct {
 	CSRF              bool          `json:"csrf"`
 	Debug             bool          `json:"debug"`
 	Repository        string        `json:"repository"`
+}
+
+type MongoConfig struct {
+	URI      string `json:"uri"`
+	Database string `json:"database"`
+	Timeout  int    `json:"timeout"`
 }

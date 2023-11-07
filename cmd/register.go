@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 
-	health_check "coffee-choose/pkg/api/health-check"
+	"coffee-choose/pkg/api/health-check"
 	"coffee-choose/pkg/config"
 	"coffee-choose/router"
 	"coffee-choose/server"
@@ -25,7 +25,8 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 		return err
 	}
 
-	if err := health_check.Register(c, register); err != nil {
+	// APIs registration
+	if err := healthcheck.Register(c, register); err != nil {
 		return err
 	}
 
