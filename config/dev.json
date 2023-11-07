@@ -3,6 +3,6 @@
     "port": 8080,
     "appName": "coffee-choose",
     "appVersion": "0.0.1",
-    "repository": "https://github.com/rflpazini/coffee-choose"
+    "repository": "https://github.com/rflpazini/coffee-chooser"
   }
 }
