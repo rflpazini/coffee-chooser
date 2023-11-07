@@ -2,6 +2,7 @@ package healthcheck
 
 import (
 	"net/http"
+	"runtime/debug"
 
 	"coffee-choose/pkg/config"
 	"github.com/labstack/echo/v4"
@@ -16,6 +17,32 @@ type makeHealthCheckParams struct {
 
 func makeHealthCheckHandler(p makeHealthCheckParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		return c.JSON(http.StatusOK, p.ServerConfig)
+		var commitHash string
+		var goVersion string
+
+		if bi, ok := debug.ReadBuildInfo(); ok {
+			goVersion = bi.GoVersion
+
+			for _, kv := range bi.Settings {
+				if kv.Key == "vcs.revision" {
+					commitHash = kv.Value
+					break
+				}
+			}
+		}
+
+		rsp := Response{
+			App: App{
+				Name:      p.ServerConfig.AppName,
+				Version:   p.ServerConfig.AppVersion,
+				GoVersion: goVersion,
+				Codebase: Codebase{
+					Repository: p.ServerConfig.Repository,
+					CommitHash: commitHash,
+				},
+			},
+		}
+
+		return c.JSON(http.StatusOK, rsp)
 	}
 }

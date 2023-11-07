@@ -2,10 +2,11 @@ BINARY_NAME=bin/coffee-choose
 
 # Main
 build:
-	go build -o ${BINARY_NAME} ./cmd/main.go
+	make easyjson
+	go build -o ${BINARY_NAME} ./cmd
 
 run:
-	go build -o ${BINARY_NAME} ./cmd/main.go
+	go build -o ${BINARY_NAME} ./cmd
 	./${BINARY_NAME}
 
 clean:

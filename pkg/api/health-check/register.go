@@ -17,13 +17,11 @@ type healthCheckParams struct {
 
 func setupRoutes(p healthCheckParams) router.RouteGroup {
 	health := p.Echo.Group("/healthcheck")
-	{
-		health.GET("/info", p.HealthCheckHandler)
-		health.GET("/ping", func(c echo.Context) error {
-			return c.JSON(http.StatusOK, map[string]string{"ping": "pong"})
 
-		})
-	}
+	health.GET("/info", p.HealthCheckHandler)
+	health.GET("/ping", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]string{"ping": "pong"})
+	})
 
 	return router.RouteGroup{Group: health}
 }

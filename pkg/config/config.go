@@ -23,4 +23,5 @@ type ServerConfig struct {
 	CtxDefaultTimeout time.Duration `json:"ctxDefaultTimeout"`
 	CSRF              bool          `json:"csrf"`
 	Debug             bool          `json:"debug"`
+	Repository        string        `json:"repository"`
 }

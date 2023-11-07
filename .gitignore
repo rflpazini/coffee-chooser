@@ -11,6 +11,8 @@
 *.dll
 *.so
 *.dylib
+bin
+vendor
 
 # Test binary, built with `go test -c`
 *.test
@@ -300,5 +302,7 @@ fabric.properties
 # Azure Toolkit for IntelliJ plugin
 # https://plugins.jetbrains.com/plugin/8053-azure-toolkit-for-intellij
 .idea/**/azureSettings.xml
+
+*_easyjson.go
 
 # End of https://www.toptal.com/developers/gitignore/api/go,goland,macos,linux
