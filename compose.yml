@@ -3,35 +3,36 @@ version: '3'
 services:
   coffee-chooser-api:
     build: .
-    image: coffee-chooser
     ports:
       - '8080:8080'
     restart: always
-    environment:
-      - MONGODB_URL=mongodb://mongodb:27017/coffee-chooser
     volumes:
       - .:/src
     depends_on:
-      - mongodb
-    networks:
-      - go-network
+      - mongo
 
-  mongodb:
-    image: mongo:latest
+  mongo:
+    image: mongo
+    restart: always
     ports:
       - '27017:27017'
     volumes:
       - db:/data/db
-    restart: always
     environment:
-      MONGO_INITDB_ROOT_USERNAME: dev-coffee
-      MONGO_INITDB_ROOT_PASSWORD: asd123Qwe
-    networks:
-        - go-network
+      MONGO_INITDB_ROOT_USERNAME: dev
+      MONGO_INITDB_ROOT_PASSWORD: pass123Qe
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - '8081:8081'
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: dev
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass123Qe
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin
+      ME_CONFIG_MONGODB_URL: mongodb://dev:pass123Qe@mongo:27017/
 
 volumes:
   db:
-
-networks:
-  go-network:
-    driver: bridge
