@@ -1,38 +1,12 @@
-name: Build
+name: Publish
 
 on:
-  pull_request:
-    branches: [ "staging" ]
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-      - name: Download dependencies
-        run: make deps
-      - name: Build binary
-        run: make build
-
-  unit-tests:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.21'
-      - name: Download dependencies
-        run: make deps
-      - name: Run tests
-        run: make test
-
   docker-build:
     runs-on: ubuntu-latest
     strategy:
@@ -57,6 +31,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
@@ -66,9 +41,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
           # generate Docker tags based on the following events/attributes
           tags: |
-            type=schedule
             type=ref,event=branch
-            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
@@ -84,5 +57,5 @@ jobs:
           context: .
           platforms: ${{ matrix.platform }}
           file: ./Dockerfile
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
