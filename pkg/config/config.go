@@ -28,6 +28,6 @@ type ServerConfig struct {
 
 type MongoConfig struct {
 	URI     string `json:"uri"`
-	Name    string `json:"database"`
+	Name    string `json:"name"`
 	Timeout int    `json:"timeout"`
 }

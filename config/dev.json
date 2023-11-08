@@ -7,7 +7,7 @@
   },
   "mongo": {
     "uri": "mongodb://dev:pass123Qe@localhost:27017/",
-    "database": "coffee-chooser",
+    "name": "coffee-chooser",
     "timeout": 3000
   }
 }
