@@ -1,5 +1,6 @@
 FROM golang:1.21-alpine as base
-LABEL authors="rflpazini"
+LABEL authors="rflpazini@gmail.com"
+
 RUN apk add --no-cache curl
 RUN apk add --no-cache git ca-certificates openssh-client
 RUN apk add --no-cache g++ && apk --no-cache add make

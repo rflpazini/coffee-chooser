@@ -6,7 +6,6 @@
     "repository": "https://github.com/rflpazini/coffee-chooser"
   },
   "mongo": {
-    "uri": "mongodb://dev:pass123Qe@localhost:27017",
     "name": "coffee-chooser",
     "timeout": 3000
   }
