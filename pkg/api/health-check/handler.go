@@ -2,6 +2,7 @@ package healthcheck
 
 import (
 	"net/http"
+	"os"
 	"runtime/debug"
 
 	"coffee-choose/pkg/config"
@@ -39,6 +40,7 @@ func makeHealthCheckHandler(p makeHealthCheckParams) echo.HandlerFunc {
 				Codebase: Codebase{
 					Repository: p.ServerConfig.Repository,
 					CommitHash: commitHash,
+					Branch:     os.Getenv("BRANCH"),
 				},
 			},
 		}

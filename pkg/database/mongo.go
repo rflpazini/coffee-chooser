@@ -49,12 +49,12 @@ func makeMongoDB(p mongodbParams) (*mongo.Database, error) {
 		return nil, err
 	}
 
-	log.Ctx(ctx).Debug().Msgf("Pinging MongoDB database %s", p.Database)
+	log.Ctx(ctx).Debug().Msgf("Pinging MongoDB database %s", p.Name)
 	if err := p.Ping(ctx, readpref.Primary()); err != nil {
 		panic(err)
 	}
 
-	return p.Database(p.MongoConfig.Name), nil
+	return p.Database(p.Name), nil
 }
 
 type Ping func() error

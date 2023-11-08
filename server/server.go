@@ -65,7 +65,7 @@ func makeStart(s server) Start {
 
 		log.Info().Msg("Server exited properly")
 		if err := s.Shutdown(ctx); err != nil {
-			log.Fatal().Msgf("Server shutdown failed: ", err)
+			log.Fatal().Msgf("Server shutdown failed: %s", err)
 		}
 
 		return nil
