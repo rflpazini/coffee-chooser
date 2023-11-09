@@ -7,6 +7,9 @@ on:
     branches:
       - staging
 
+env:
+  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
+
 jobs:
   tag-pre-release:
     runs-on: ubuntu-latest
