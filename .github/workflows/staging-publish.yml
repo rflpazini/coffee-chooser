@@ -12,19 +12,19 @@ env:
 
 jobs:
   tag-pre-release:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            ref: ${{ github.event.pull_request.merge_commit_sha }}
-            fetch-depth: '0'
-        - name: Bump version and push tag
-          uses: anothrNick/github-tag-action@1.64.0
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            WITH_V: true
-            PRERELEASE: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WITH_V: true
+          PRERELEASE: false
   docker-build:
     runs-on: ubuntu-latest
     strategy:
@@ -32,8 +32,6 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-#          - linux/arm/v7
-#          - linux/arm64/v8
     needs: tag-release
     steps:
       - name: Checkout
