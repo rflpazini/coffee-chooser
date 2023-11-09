@@ -9,6 +9,7 @@ import (
 
 const (
 	DEV  = "dev"
+	STAG = "staging"
 	PROD = "production"
 )
 
@@ -19,9 +20,10 @@ func NewConfig() (*config.Config, error) {
 	env := os.Getenv("ENV")
 	if env == PROD {
 		cfgFile = PROD + ".json"
+	} else if env == STAG {
+		cfgFile = STAG + ".json"
 	} else {
 		cfgFile = DEV + ".json"
-
 	}
 
 	loader := aconfig.LoaderFor(&cfg, aconfig.Config{
