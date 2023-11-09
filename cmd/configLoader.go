@@ -9,25 +9,17 @@ import (
 
 const (
 	DEV  = "dev"
+	STAG = "staging"
 	PROD = "production"
 )
 
 func NewConfig() (*config.Config, error) {
 	var cfg config.Config
-	var cfgFile string
-
-	env := os.Getenv("ENV")
-	if env == PROD {
-		cfgFile = PROD + ".json"
-	} else {
-		cfgFile = DEV + ".json"
-
-	}
 
 	loader := aconfig.LoaderFor(&cfg, aconfig.Config{
 		SkipEnv:   true,
 		SkipFlags: true,
-		Files:     []string{"config/" + cfgFile},
+		Files:     []string{getConfigFile()},
 	})
 	if err := loader.Load(); err != nil {
 		return nil, err
@@ -39,4 +31,21 @@ func NewConfig() (*config.Config, error) {
 	}
 
 	return &cfg, nil
+}
+
+func getConfigFile() string {
+	path := "config/"
+	fileExt := ".json"
+	var fileName string
+
+	env := os.Getenv("ENV")
+	if env == PROD {
+		fileName = PROD + fileExt
+	} else if env == STAG {
+		fileName = STAG + fileExt
+	} else {
+		fileName = DEV + fileExt
+	}
+
+	return path + fileName
 }
