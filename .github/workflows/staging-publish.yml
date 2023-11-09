@@ -2,8 +2,10 @@ name: build and tag docker image pre-release
 
 on:
   push:
+    branches:
+      - 'staging'
     tags:
-      - '**'
+      - *
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
