@@ -3,10 +3,7 @@ name: build and tag docker image pre-release
 on:
   push:
     tags:
-      - '**-beta'
-      - '**-beta*'
-      - '**-beta**'
-      - '**-beta.**'
+      - '**'
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
