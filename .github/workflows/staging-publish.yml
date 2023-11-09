@@ -27,12 +27,7 @@ jobs:
           PRERELEASE: false
   docker-build:
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        platform:
-          - linux/amd64
-    needs: tag-release
+    needs: tag-pre-release
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,7 +53,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64
           file: ./Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
