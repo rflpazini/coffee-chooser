@@ -1,15 +1,30 @@
-name: build and tag docker image release
+name: build and tag docker image pre-release
 
 on:
-  push:
-    branches: [ "main" ]
-    tags:
-      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+  pull_request:
+    types:
+      - closed
+    branches:
+      - staging
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
 
 jobs:
+  tag-pre-release:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            ref: ${{ github.event.pull_request.merge_commit_sha }}
+            fetch-depth: '0'
+        - name: Bump version and push tag
+          uses: anothrNick/github-tag-action@1.64.0
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            WITH_V: true
+            PRERELEASE: false
   docker-build:
     runs-on: ubuntu-latest
     strategy:
@@ -19,7 +34,7 @@ jobs:
           - linux/amd64
           - linux/arm/v7
           - linux/arm64/v8
-    needs: [build, unit-tests]
+    needs: tag-release
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +64,8 @@ jobs:
           file: ./Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Export digest
         run: |
           mkdir -p /tmp/digests
@@ -62,10 +79,9 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  merge:
+  docker-tagging:
     runs-on: ubuntu-latest
-    needs:
-      - docker-build
+    needs: docker-build
     steps:
       - name: Download digests
         uses: actions/download-artifact@v3
@@ -78,10 +94,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
-          images: |
-            ${{ env.REGISTRY_IMAGE }}
-          # generate Docker tags based on the following events/attributes
+          images: ${{ env.REGISTRY_IMAGE }}
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
