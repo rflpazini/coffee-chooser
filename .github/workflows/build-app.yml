@@ -45,8 +45,8 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-#          - linux/arm/v7
-#          - linux/arm64/v8
+          - linux/arm/v7
+          - linux/arm64/v8
     needs: [ go-build, unit-tests ]
     steps:
       - name: Checkout
@@ -79,6 +79,8 @@ jobs:
           file: ./Dockerfile
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY_IMAGE }},push-by-digest=true,name-canonical=true,push=true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
       - name: Export digest
         run: |
           mkdir -p /tmp/digests
@@ -116,7 +118,6 @@ jobs:
           images: ${{ env.REGISTRY_IMAGE }}
           tags: |
             type=ref,event=branch
-            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
