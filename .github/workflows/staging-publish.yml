@@ -4,8 +4,9 @@ on:
   push:
     tags:
       - '**-beta'
-      - '**-alpha'
-      - '**-beta.*'
+      - '**-beta*'
+      - '**-beta**'
+      - '**-beta.**'
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
