@@ -1,46 +1,45 @@
-name: publish staging pre-release
-
-on:
-  push:
-    branches:
-      - 'staging'
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - 'staging'
-
-env:
-    REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
-
-jobs:
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      -
-        name: Checkout
-        uses: actions/checkout@v4
-      -
-        name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: $ {{ env.REGISTRY_IMAGE }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-      -
-        name: Login to DockerHub
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      -
-        name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+#name: publish staging pre-release
+#
+#on:
+#  push:
+#    branches:
+#      - 'staging'
+#    tags:
+#      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+#
+#env:
+#    REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
+#
+#jobs:
+#  docker:
+#    runs-on: ubuntu-latest
+#    steps:
+#      -
+#        name: Checkout
+#        uses: actions/checkout@v4
+#      -
+#        name: Docker meta
+#        id: meta
+#        uses: docker/metadata-action@v5
+#        with:
+#          images: $ {{ env.REGISTRY_IMAGE }}
+#          tags: |
+#            type=ref,event=tag
+#            type=semver,pattern={{version}}
+#            type=semver,pattern={{major}}.{{minor}}
+#            type=match,pattern=v(.*),group=1,value=v1.0.0
+#      -
+#        name: Login to DockerHub
+#        if: github.event_name != 'pull_request'
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#      -
+#        name: Build and push
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          push: ${{ github.event_name != 'pull_request' }}
+#          tags: ${{ steps.meta.outputs.tags }}
+#          labels: ${{ steps.meta.outputs.labels }}
