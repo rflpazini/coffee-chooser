@@ -6,9 +6,8 @@ on:
       - "v*.*.*-beta.*"
 
 env:
-  APP_NAME: coffee-chooser
   AWS_PEM_FILE_NAME: ${{ secrets.AWS_PEM }}.pem
-  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
+  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
   AWS_INSTANCE: ${{ secrets.AWS_USERNAME }}@${{ secrets.AWS_HOSTNAME }}
 
 jobs:
@@ -23,7 +22,7 @@ jobs:
         id: meta
         run: |
           VERSION=${GITHUB_REF_NAME#v}
-          echo App: $APP_NAME
+          echo App: ${{ vars.APP_NAME }}
           echo Version: $VERSION
           echo "tags=$(echo $VERSION)" >> "$GITHUB_OUTPUT"
 
@@ -52,12 +51,13 @@ jobs:
   deploy:
     needs: docker-build
     runs-on: ubuntu-latest
-    env:
-      DOCKER_IMAGE_NAME: ${{ env.REGISTRY_IMAGE }}:${{ needs.docker-build.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set Docker image name
+        run: |
+          echo "DOCKER_IMAGE_NAME=${{ env.REGISTRY_IMAGE }}:${{ needs.docker-build.outputs.version }}" >> "$GITHUB_ENV"
       - name: Set permissions for private key
         run: |
           echo "${{ secrets.AWS_SECRET_KEY }}" > ${{ env.AWS_PEM_FILE_NAME }}
