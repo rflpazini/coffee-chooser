@@ -72,3 +72,4 @@ jobs:
       - name: Run new container
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ env.PEM_FILE }} ${{ env.EC2_HOST }} 'sudo docker run -d --name coffee-chooser -p 80:8080 ${{ env.REGISTRY_IMAGE }}:${{ env.TAGS }}'
+
