@@ -1,7 +1,11 @@
 name: publish staging pre-release
 
 on:
-  create:
+  push:
+    tags:
+      - "*"
+      - "v*.*.*-beta.*"
+
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
