@@ -3,7 +3,6 @@ name: publish staging pre-release
 on:
   push:
     tags:
-      - "*"
       - "v*.*.*-beta.*"
 
 
@@ -35,5 +34,5 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.tags }}
 
