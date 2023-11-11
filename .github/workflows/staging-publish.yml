@@ -7,12 +7,14 @@ on:
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
-  EC2_HOST: ubuntu@ec2-35-153-136-59.compute-1.amazonaws.com
+  EC2_HOST: ${{ secrets.AWS_USERNAME }}@${{ secrets.AWS_HOSTNAME }}
   PEM_FILE: moddream.pem
 
 jobs:
   docker-build:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.tags }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -21,7 +23,7 @@ jobs:
         run: |
           VERSION=${GITHUB_REF_NAME#v}
           echo Version: $VERSION
-          echo "TAGS=$(echo ${GITHUB_REF_NAME#v})" >> "$GITHUB_ENV"
+          echo "TAGS=$(echo ${GITHUB_REF_NAME#v})" >> "$GITHUB_OUTPUT"
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -44,10 +46,12 @@ jobs:
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+          
   deploy:
     needs: docker-build
     runs-on: ubuntu-latest
+    env:
+      TAGS: ${{ needs.docker-build.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -61,7 +65,7 @@ jobs:
       - name: Set permissions for private key
         run: |
           echo "${{ secrets.AWS_SECRET_KEY }}" > ${{ env.PEM_FILE }}
-          chmod 600 moddream.pem
+          chmod 600 ${{ env.PEM_FILE }}
       - name: Pull Docker image
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ env.PEM_FILE }} ${{ env.EC2_HOST }} 'sudo docker pull ${{ env.REGISTRY_IMAGE }}:${{ env.TAGS }}'
@@ -72,4 +76,3 @@ jobs:
       - name: Run new container
         run: |
           ssh -o StrictHostKeyChecking=no -i ${{ env.PEM_FILE }} ${{ env.EC2_HOST }} 'sudo docker run -d --name coffee-chooser -p 80:8080 ${{ env.REGISTRY_IMAGE }}:${{ env.TAGS }}'
-
