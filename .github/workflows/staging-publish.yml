@@ -42,7 +42,7 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ env.REGISTRY_IMAGE }}:${{ env.TAGS }}
+          tags: ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.tags }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
