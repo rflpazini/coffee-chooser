@@ -3,7 +3,7 @@ name: publish staging pre-release
 on:
   push:
     tags:
-      - 'v[0-9]+(\.[0-9]+)*([-\.]\S+)?'
+      - 'v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
