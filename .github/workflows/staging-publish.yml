@@ -1,14 +1,16 @@
 name: publish staging pre-release
 
 on:
-  create:
+  push:
+    tags:
+      - "v*.*.*-beta.*"
+
 
 env:
   REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
 
 jobs:
   docker-build:
-    if: ${{ contains(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
