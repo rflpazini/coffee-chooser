@@ -1,6 +1,6 @@
 # coffee-chooser
 
-[![Build](https://github.com/rflpazini/coffee-chooser/actions/workflows/gobuild.yml/badge.svg)](https://github.com/rflpazini/coffee-chooser/actions/workflows/gobuild.yml)
+[![Build](https://github.com/rflpazini/coffee-chooser/actions/workflows/build-app.yml/badge.svg)](https://github.com/rflpazini/coffee-chooser/actions/workflows/build-app.yml)
 
 A simple app to help you choose a coffee brewing method.
 
