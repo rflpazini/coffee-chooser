@@ -64,11 +64,11 @@ jobs:
           chmod 600 ${{ env.AWS_PEM_FILE_NAME }}
       - name: Pull Docker image
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'sudo docker pull ${{ env.DOCKER_IMAGE_NAME }}'
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker pull ${{ env.DOCKER_IMAGE_NAME }}'
       - name: Stop running container
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'sudo docker stop ${{ env.APP_NAME }} || true'
-          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'sudo docker rm ${{ env.APP_NAME }} || true'
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker stop ${{ env.APP_NAME }} || true'
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker rm ${{ env.APP_NAME }} || true'
       - name: Run new container
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'sudo docker run -d --name ${{ env.APP_NAME }} -p 80:8080 ${{ env.DOCKER_IMAGE_NAME }}'
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker run -d --name ${{ env.APP_NAME }} -p 80:8080 ${{ env.DOCKER_IMAGE_NAME }}'
