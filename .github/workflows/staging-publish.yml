@@ -8,7 +8,7 @@ on:
 env:
   APP_NAME: coffee-chooser
   AWS_PEM_FILE_NAME: ${{ secrets.AWS_PEM }}.pem
-  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.APP_NAME }}
+  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/coffee-chooser
   AWS_INSTANCE: ${{ secrets.AWS_USERNAME }}@${{ secrets.AWS_HOSTNAME }}
 
 jobs:
