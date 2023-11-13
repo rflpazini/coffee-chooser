@@ -21,6 +21,7 @@ jobs:
       - name: Get tag name
         id: meta
         run: |
+          echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
           VERSION=${GITHUB_REF_NAME#v}
           echo App: ${{ vars.APP_NAME }}
           echo Version: $VERSION
@@ -47,6 +48,7 @@ jobs:
           build-args: |
             APP_VERSION=${{ steps.meta.outputs.tags }}
             MONGODB_URL=${{ secrets.MONGO_CONNECTION_STRING }}
+            BRANCH_NAME=${{ env.BRANCH }}
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max

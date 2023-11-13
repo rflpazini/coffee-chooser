@@ -40,7 +40,7 @@ func makeHealthCheckHandler(p makeHealthCheckParams) echo.HandlerFunc {
 				Codebase: Codebase{
 					Repository: p.ServerConfig.Repository,
 					CommitHash: commitHash,
-					Branch:     os.Getenv("BRANCH"),
+					Branch:     os.Getenv("BRANCH_NAME"),
 				},
 			},
 		}
