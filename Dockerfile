@@ -20,7 +20,13 @@ RUN make build
 FROM alpine:3.18
 WORKDIR /app
 
-ENV MONGODB_URL=mongodb://localhost:27017
+ARG APP_VERSION
+ARG MONGODB_URL
+ARG BRANCH_NAME
+
+ENV APP_VERSION ${APP_VERSION}
+ENV MONGODB_URL ${MONGODB_URL}
+ENV BRANCH_NAME ${BRANCH_NAME}
 
 COPY --from=builder /go/src/config/ ./config/
 COPY --from=builder /go/src/bin/coffee-chooser .

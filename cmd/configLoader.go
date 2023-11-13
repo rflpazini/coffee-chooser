@@ -30,6 +30,11 @@ func NewConfig() (*config.Config, error) {
 		cfg.Mongo.URI = mongo
 	}
 
+	version := os.Getenv("APP_VERSION")
+	if version != "" {
+		cfg.Server.AppVersion = version
+	}
+
 	return &cfg, nil
 }
 
