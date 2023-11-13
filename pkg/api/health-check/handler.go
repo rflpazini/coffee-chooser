@@ -42,6 +42,11 @@ func makeHealthCheckHandler(p makeHealthCheckParams) echo.HandlerFunc {
 					CommitHash: commitHash,
 					Branch:     os.Getenv("BRANCH_NAME"),
 				},
+				Environment: Environment{
+					Name:       os.Getenv("STACK"),
+					InstanceId: os.Getenv("INSTANCE_ID"),
+					Region:     os.Getenv("EC2_REGION"),
+				},
 			},
 		}
 
