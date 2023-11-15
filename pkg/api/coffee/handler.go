@@ -26,12 +26,12 @@ type makePostParams struct {
 func makePostHandler(p makePostParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
-		r = r.WithContext(context.WithValue(context.Background(), saveBrewingMethod, nil))
 		var input coffee.BrewingRequest
 
 		if err := c.Bind(&input); err != nil {
 			return err
 		}
+		r = r.WithContext(context.WithValue(context.Background(), saveBrewingMethod, input))
 
 		input.UpdatedAt = time.Now()
 		go func() {
@@ -80,12 +80,12 @@ type makeDeleteParams struct {
 func makeDeleteRequest(p makeDeleteParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
-		r = r.WithContext(context.WithValue(context.Background(), deleteBrewingMethod, nil))
 
 		name := c.Param("name")
 		if name == "" {
 			return c.JSON(http.StatusBadRequest, "name is required")
 		}
+		r = r.WithContext(context.WithValue(context.Background(), deleteBrewingMethod, name))
 
 		err := p.DeleteBrewingMethod(r.Context(), name)
 		if err != nil {
