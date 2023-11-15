@@ -76,3 +76,25 @@ func makeGetBrewingMethod(p getParams) GetBrewingMethod {
 		return brewingResponse, nil
 	}
 }
+
+type DeleteBrewingMethod func(ctx context.Context, name string) error
+
+type deleteParams struct {
+	dig.In
+
+	*mongo.Database
+}
+
+func makeDeleteBrewingMethod(p deleteParams) DeleteBrewingMethod {
+	return func(ctx context.Context, name string) error {
+		coll := p.Collection(BrewingCollection)
+		methodName := bson.M{"name": name}
+
+		_, err := coll.DeleteOne(ctx, methodName)
+		if err != nil {
+			log.Error().Err(err).Msgf("Failed to delete: %s", name)
+		}
+
+		return err
+	}
+}

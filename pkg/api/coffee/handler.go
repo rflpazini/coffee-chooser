@@ -12,8 +12,9 @@ import (
 )
 
 const (
-	getBrewingMethod  = "get-brewing-method"
-	saveBrewingMethod = "save-brewing-method"
+	getBrewingMethod    = "get-brewing-method"
+	saveBrewingMethod   = "save-brewing-method"
+	deleteBrewingMethod = "delete-brewing-method"
 )
 
 type makePostParams struct {
@@ -30,7 +31,6 @@ func makePostHandler(p makePostParams) echo.HandlerFunc {
 		if err := c.Bind(&input); err != nil {
 			return err
 		}
-
 		r = r.WithContext(context.WithValue(context.Background(), saveBrewingMethod, input))
 
 		input.UpdatedAt = time.Now()
@@ -69,4 +69,29 @@ func makeGetRequest(p makeGetParams) echo.HandlerFunc {
 		return c.JSON(http.StatusOK, methods)
 	}
 
+}
+
+type makeDeleteParams struct {
+	dig.In
+
+	coffee.DeleteBrewingMethod
+}
+
+func makeDeleteRequest(p makeDeleteParams) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := c.Request()
+
+		name := c.Param("name")
+		if name == "" {
+			return c.JSON(http.StatusBadRequest, "name is required")
+		}
+		r = r.WithContext(context.WithValue(context.Background(), deleteBrewingMethod, name))
+
+		err := p.DeleteBrewingMethod(r.Context(), name)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.NoContent(http.StatusOK)
+	}
 }
