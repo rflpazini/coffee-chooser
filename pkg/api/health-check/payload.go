@@ -21,7 +21,7 @@ type Codebase struct {
 }
 
 type Environment struct {
-	Name       string `json:"name"`
-	InstanceId string `json:"instanceId"`
-	Region     string `json:"region"`
+	Name       string `json:"name,omitempty"`
+	InstanceId string `json:"instanceId,omitempty"`
+	Region     string `json:"region,omitempty"`
 }

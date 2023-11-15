@@ -1,17 +1,17 @@
 version: '3'
 
 services:
-  api:
-    build: .
-    ports:
-      - '8080:8080'
-    restart: always
-    environment:
-      MONGODB_URL: mongodb://dev:pass123Qe@mongo:27017/
-    volumes:
-      - .:/src
-    depends_on:
-      - mongo
+#  api:
+#    build: .
+#    ports:
+#      - '8080:8080'
+#    restart: always
+#    environment:
+#      MONGODB_URL: mongodb://dev:pass123Qe@mongo:27017/
+#    volumes:
+#      - .:/src
+#    depends_on:
+#      - mongo
 
   mongo:
     image: mongo

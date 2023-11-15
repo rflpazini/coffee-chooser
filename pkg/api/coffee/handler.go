@@ -2,33 +2,71 @@ package coffee
 
 import (
 	"context"
-	"fmt"
 	"net/http"
+	"time"
 
+	"coffee-choose/pkg/service/coffee"
 	"github.com/labstack/echo/v4"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"github.com/rs/zerolog/log"
 	"go.uber.org/dig"
 )
 
-type makeTestParams struct {
+const (
+	getBrewingMethod  = "get-brewing-method"
+	saveBrewingMethod = "save-brewing-method"
+)
+
+type makePostParams struct {
 	dig.In
 
-	*mongo.Database
+	coffee.SaveBrewingMethod
 }
 
-func makeTestHandler(p makeTestParams) echo.HandlerFunc {
+func makePostHandler(p makePostParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		coll := p.Collection("users")
-		user := bson.D{{"fullName", "User 1"}, {"age", 30}}
+		r := c.Request()
+		var input coffee.BrewingRequest
 
-		result, err := coll.InsertOne(context.TODO(), user)
-		if err != nil {
-			fmt.Printf("err: %v\n", err)
-			return c.JSON(http.StatusInternalServerError, err)
+		if err := c.Bind(&input); err != nil {
+			return err
 		}
 
-		fmt.Printf("Inserted document with _id: %v\n", result.InsertedID)
-		return c.JSON(http.StatusOK, result)
+		r = r.WithContext(context.WithValue(context.Background(), saveBrewingMethod, input))
+
+		input.UpdatedAt = time.Now()
+		go func() {
+			err := p.SaveBrewingMethod(r.Context(), input)
+			if err != nil {
+				log.Err(err).Msgf("error saving to DB: %s", err.Error())
+				return
+			}
+		}()
+
+		return c.NoContent(http.StatusCreated)
 	}
+}
+
+type makeGetParams struct {
+	dig.In
+
+	coffee.GetBrewingMethod
+}
+
+func makeGetRequest(p makeGetParams) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := c.Request()
+		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethod, nil))
+
+		methods, err := p.GetBrewingMethod(r.Context())
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		if len(methods) < 1 {
+			c.Response().WriteHeader(http.StatusNotFound)
+		}
+
+		return c.JSON(http.StatusOK, methods)
+	}
+
 }
