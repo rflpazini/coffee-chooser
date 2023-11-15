@@ -7,6 +7,7 @@ import (
 	"coffee-choose/pkg/api/health-check"
 	"coffee-choose/pkg/config"
 	"coffee-choose/pkg/database"
+	coffeeService "coffee-choose/pkg/service/coffee"
 	"coffee-choose/router"
 	"coffee-choose/server"
 	"go.uber.org/dig"
@@ -28,6 +29,10 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 	}
 
 	if err := server.Register(register); err != nil {
+		return err
+	}
+
+	if err := coffeeService.Register(register); err != nil {
 		return err
 	}
 
