@@ -6,5 +6,6 @@ func Register(register func(...interface{}) error) error {
 		makeMongoDB,
 		makeMongoPing,
 		makeMongoDisconnect,
+		makeBrewingCollection,
 	)
 }

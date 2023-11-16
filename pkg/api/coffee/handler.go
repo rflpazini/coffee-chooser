@@ -12,10 +12,64 @@ import (
 )
 
 const (
-	getBrewingMethod    = "get-brewing-method"
-	saveBrewingMethod   = "save-brewing-method"
-	deleteBrewingMethod = "delete-brewing-method"
+	getBrewingMethod       = "get-brewing-method"
+	getBrewingMethodByName = "get-brewing-method-by-name"
+	saveBrewingMethod      = "save-brewing-method"
+	deleteBrewingMethod    = "delete-brewing-method"
 )
+
+type makeGetParams struct {
+	dig.In
+
+	coffee.GetBrewingMethod
+}
+
+func makeGetAllRequest(p makeGetParams) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := c.Request()
+		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethod, nil))
+
+		methods, err := p.GetBrewingMethod(r.Context())
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		if methods == nil {
+			c.Response().WriteHeader(http.StatusNotFound)
+		}
+
+		return c.JSON(http.StatusOK, methods)
+	}
+
+}
+
+type makeGetByNameParams struct {
+	dig.In
+
+	coffee.GetBrewingMethodByName
+}
+
+func makeGetByName(p makeGetByNameParams) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := c.Request()
+		name := c.Param("name")
+		if name == "" {
+			return c.JSON(http.StatusBadRequest, "name is required")
+		}
+		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethodByName, name))
+
+		method, err := p.GetBrewingMethodByName(r.Context(), name)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		if method == nil {
+			c.Response().WriteHeader(http.StatusNotFound)
+		}
+
+		return c.JSON(http.StatusOK, method)
+	}
+}
 
 type makePostParams struct {
 	dig.In
@@ -23,7 +77,7 @@ type makePostParams struct {
 	coffee.SaveBrewingMethod
 }
 
-func makePostHandler(p makePostParams) echo.HandlerFunc {
+func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
 		var input coffee.BrewingRequest
@@ -46,38 +100,13 @@ func makePostHandler(p makePostParams) echo.HandlerFunc {
 	}
 }
 
-type makeGetParams struct {
-	dig.In
-
-	coffee.GetBrewingMethod
-}
-
-func makeGetRequest(p makeGetParams) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		r := c.Request()
-		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethod, nil))
-
-		methods, err := p.GetBrewingMethod(r.Context())
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
-		}
-
-		if len(methods) < 1 {
-			c.Response().WriteHeader(http.StatusNotFound)
-		}
-
-		return c.JSON(http.StatusOK, methods)
-	}
-
-}
-
 type makeDeleteParams struct {
 	dig.In
 
 	coffee.DeleteBrewingMethod
 }
 
-func makeDeleteRequest(p makeDeleteParams) echo.HandlerFunc {
+func makeDeleteByNameRequest(p makeDeleteParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
 
