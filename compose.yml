@@ -25,6 +25,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: pass123Qe
 
   mongo-express:
+    depends_on:
+      - mongo
     image: mongo-express
     restart: always
     ports:
