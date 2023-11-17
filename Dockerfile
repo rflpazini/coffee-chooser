@@ -20,6 +20,9 @@ RUN make build
 FROM alpine:3.18
 WORKDIR /app
 
+RUN apk -U upgrade && \
+    rm -rf /var/cache/apk/*
+
 ARG APP_VERSION
 ARG MONGODB_URL
 ARG BRANCH_NAME
