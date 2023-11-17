@@ -28,7 +28,7 @@ func setupBrewingRoutes(p healthCheckParams) router.RouteGroup {
 }
 
 func Register(c *dig.Container, register func(...interface{}) error) error {
-	if err := c.Provide(makeGetAllRequest, dig.Name("Route.Handler.Brewing.Get")); err != nil {
+	if err := c.Provide(makeGetRequest, dig.Name("Route.Handler.Brewing.Get")); err != nil {
 		return err
 	}
 

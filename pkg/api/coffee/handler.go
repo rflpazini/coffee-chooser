@@ -28,7 +28,7 @@ type makeGetParams struct {
 	coffee.GetBrewingMethodByName
 }
 
-func makeGetAllRequest(p makeGetParams) echo.HandlerFunc {
+func makeGetRequest(p makeGetParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
 		name := strings.ToLower(c.QueryParam("name"))
