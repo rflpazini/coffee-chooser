@@ -6,7 +6,7 @@ import "time"
 
 //easyjson:json
 type BrewingRequest struct {
-	Name        string    `json:"name" bson:"name,omitempty"`
+	Name        string    `json:"name" bson:"name,omitempty" example:"V60"`
 	Description string    `json:"description"  bson:"description,omitempty"`
 	UpdatedAt   time.Time `json:"updatedAt" bson:"updatedAt,omitempty" example:"2020-07-12T18:17:43.511Z"`
 }

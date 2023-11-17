@@ -2,12 +2,15 @@ package coffee
 
 import (
 	"context"
+	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"coffee-choose/pkg/service/coffee"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/dig"
 )
 
@@ -22,52 +25,32 @@ type makeGetParams struct {
 	dig.In
 
 	coffee.GetBrewingMethod
+	coffee.GetBrewingMethodByName
 }
 
 func makeGetAllRequest(p makeGetParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
-		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethod, nil))
+		name := strings.ToLower(c.QueryParam("name"))
 
-		methods, err := p.GetBrewingMethod(r.Context())
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+		if name != "" {
+			r = r.WithContext(context.WithValue(context.Background(), getBrewingMethodByName, name))
+
+			method, err := p.GetBrewingMethodByName(r.Context(), name)
+			if errors.Is(err, mongo.ErrNoDocuments) {
+				return echo.NewHTTPError(http.StatusNotFound, "Couldn't find brewing method with name: "+name)
+			}
+
+			return c.JSON(http.StatusOK, method)
 		}
 
-		if methods == nil {
-			c.Response().WriteHeader(http.StatusNotFound)
+		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethod, nil))
+		methods, err := p.GetBrewingMethod(r.Context())
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.JSON(http.StatusOK, methods)
-	}
-
-}
-
-type makeGetByNameParams struct {
-	dig.In
-
-	coffee.GetBrewingMethodByName
-}
-
-func makeGetByName(p makeGetByNameParams) echo.HandlerFunc {
-	return func(c echo.Context) error {
-		r := c.Request()
-		name := c.Param("name")
-		if name == "" {
-			return c.JSON(http.StatusBadRequest, "name is required")
-		}
-		r = r.WithContext(context.WithValue(context.Background(), getBrewingMethodByName, name))
-
-		method, err := p.GetBrewingMethodByName(r.Context(), name)
-		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
-		}
-
-		if method == nil {
-			c.Response().WriteHeader(http.StatusNotFound)
-		}
-
-		return c.JSON(http.StatusOK, method)
 	}
 }
 
@@ -87,7 +70,9 @@ func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 		}
 		r = r.WithContext(context.WithValue(context.Background(), saveBrewingMethod, input))
 
+		input.Name = strings.ToLower(input.Name)
 		input.UpdatedAt = time.Now()
+
 		go func() {
 			err := p.SaveBrewingMethod(r.Context(), input)
 			if err != nil {
@@ -110,7 +95,7 @@ func makeDeleteByNameRequest(p makeDeleteParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
 
-		name := c.Param("name")
+		name := strings.ToLower(c.QueryParam("name"))
 		if name == "" {
 			return c.JSON(http.StatusBadRequest, "name is required")
 		}
@@ -118,7 +103,7 @@ func makeDeleteByNameRequest(p makeDeleteParams) echo.HandlerFunc {
 
 		err := p.DeleteBrewingMethod(r.Context(), name)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, err.Error())
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}
 
 		return c.NoContent(http.StatusOK)

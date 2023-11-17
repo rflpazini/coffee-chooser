@@ -46,7 +46,7 @@ func makeGetBrewingMethod(coll database.BrewingCollection) GetBrewingMethod {
 			var row *BrewingResponse
 			err := res.Decode(&row)
 			if err != nil {
-				log.Error().Err(err).Msg("Failed to decode the database response")
+				log.Error().Err(err).Msg("failed to decode the database response")
 			}
 			brewingResponse = append(brewingResponse, row)
 		}
@@ -80,7 +80,7 @@ func makeDeleteBrewingMethod(coll database.BrewingCollection) DeleteBrewingMetho
 
 		_, err := coll.DeleteOne(ctx, methodName)
 		if err != nil {
-			log.Error().Err(err).Msgf("Failed to delete: %s", name)
+			log.Error().Err(err).Msgf("failed to delete: %s", name)
 		}
 
 		return err

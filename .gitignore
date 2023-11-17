@@ -306,4 +306,6 @@ fabric.properties
 
 *_easyjson.go
 
+Docker
+
 # End of https://www.toptal.com/developers/gitignore/api/go,goland,macos,linux
