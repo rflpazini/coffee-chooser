@@ -73,13 +73,21 @@ func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 		input.Name = strings.ToLower(input.Name)
 		input.UpdatedAt = time.Now()
 
-		go func() {
+		saveErr := make(chan error)
+		go func(ch chan error) {
 			err := p.SaveBrewingMethod(r.Context(), input)
 			if err != nil {
-				log.Err(err).Msgf("error saving to DB: %s", err.Error())
-				return
+				log.Error().Err(err).Msgf("error saving to DB: %s", err.Error())
+				ch <- err
 			}
-		}()
+		}(saveErr)
+
+		err := <-saveErr
+		close(saveErr)
+
+		if err != nil {
+			return echo.NewHTTPError(http.StatusConflict, err.Error())
+		}
 
 		return c.NoContent(http.StatusCreated)
 	}

@@ -2,6 +2,7 @@ package coffee
 
 import (
 	"context"
+	"errors"
 
 	"coffee-choose/pkg/database"
 	"github.com/rs/zerolog/log"
@@ -12,6 +13,14 @@ type SaveBrewingMethod func(ctx context.Context, brewing BrewingRequest) error
 
 func makeSaveBrewingMethod(coll database.BrewingCollection) SaveBrewingMethod {
 	return func(ctx context.Context, req BrewingRequest) error {
+		filter := bson.M{"name": req.Name}
+		var result BrewingResponse
+
+		err := coll.FindOne(ctx, filter).Decode(&result)
+		if &result != nil {
+			return errors.New("brewing method already exists: " + req.Name)
+		}
+
 		brewingData := bson.M{
 			"name":        req.Name,
 			"description": req.Description,
