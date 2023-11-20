@@ -110,7 +110,7 @@ type DeleteBrewingMethod func(ctx context.Context, name string) error
 
 func makeDeleteBrewingMethod(coll database.BrewingCollection) DeleteBrewingMethod {
 	return func(ctx context.Context, name string) error {
-		methodName := bson.M{"name": name}
+		methodName := bson.M{"name": bson.M{"$eq": name}}
 
 		_, err := coll.DeleteOne(ctx, methodName)
 		if err != nil {
