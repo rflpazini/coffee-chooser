@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"coffee-choose/pkg/utils"
+	"github.com/brianvoe/gofakeit/v6"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -32,16 +33,16 @@ func TestBrewingRepository_GetByName(t *testing.T) {
 			name:  "Should return a success response when search for a valid name",
 			input: "test-name",
 			result: bson.M{
-				"id":          "1",
 				"name":        "test-name",
 				"description": "test-description",
 				"updatedAt":   "2023-11-16T15:35:43.511Z",
 			},
 			resultErr: nil,
 			want: BrewingResponse{
-				ID:          "1",
+				ID:          gofakeit.UUID(),
 				Name:        "test-name",
 				Description: "test-description",
+				CreatedAt:   date,
 				UpdatedAt:   date,
 			},
 			wantErr: nil,
