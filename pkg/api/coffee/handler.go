@@ -138,13 +138,13 @@ func makeDeleteByNameRequest(p makeDeleteParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
 
-		name := strings.ToLower(c.QueryParam("name"))
-		if name == "" {
+		id := strings.ToLower(c.QueryParam("id"))
+		if id == "" {
 			return c.JSON(http.StatusBadRequest, "name is required")
 		}
-		r = r.WithContext(context.WithValue(context.Background(), deleteBrewingMethod, name))
+		r = r.WithContext(context.WithValue(context.Background(), deleteBrewingMethod, id))
 
-		err := p.DeleteBrewingMethod(r.Context(), name)
+		err := p.DeleteBrewingMethod(r.Context(), id)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
 		}

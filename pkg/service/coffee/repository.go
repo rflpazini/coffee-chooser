@@ -26,6 +26,7 @@ func makeSaveBrewingMethod(coll database.BrewingCollection) SaveBrewingMethod {
 		brewingData := bson.M{
 			"name":        req.Name,
 			"description": req.Description,
+			"createdAt":   req.CreatedAt,
 			"updatedAt":   req.UpdatedAt,
 		}
 
@@ -106,15 +107,16 @@ func makeUpdateBrewingMethod(coll database.BrewingCollection) UpdateBrewingMetho
 	}
 }
 
-type DeleteBrewingMethod func(ctx context.Context, name string) error
+type DeleteBrewingMethod func(ctx context.Context, id string) error
 
 func makeDeleteBrewingMethod(coll database.BrewingCollection) DeleteBrewingMethod {
-	return func(ctx context.Context, name string) error {
-		methodName := bson.M{"name": bson.M{"$eq": name}}
+	return func(ctx context.Context, id string) error {
+		objID, _ := primitive.ObjectIDFromHex(id)
+		methodId := bson.M{"_id": bson.M{"$eq": objID}}
 
-		_, err := coll.DeleteOne(ctx, methodName)
+		_, err := coll.DeleteOne(ctx, methodId)
 		if err != nil {
-			log.Error().Err(err).Msgf("failed to delete: %s", name)
+			log.Error().Err(err).Msgf("failed to delete: %v", id)
 		}
 
 		return err
