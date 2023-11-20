@@ -12,6 +12,7 @@ type healthCheckParams struct {
 	*echo.Echo
 	BrewingGetHandler    echo.HandlerFunc `name:"Route.Handler.Brewing.Get"`
 	BrewingPostHandler   echo.HandlerFunc `name:"Route.Handler.Brewing.Post"`
+	BrewingPutHandler    echo.HandlerFunc `name:"Route.Handler.Brewing.Put"`
 	BrewingDeleteHandler echo.HandlerFunc `name:"Route.Handler.Brewing.Delete"`
 }
 
@@ -19,9 +20,8 @@ func setupBrewingRoutes(p healthCheckParams) router.RouteGroup {
 	brewingRoutes := p.Echo.Group("/v1")
 
 	brewingRoutes.GET("/brewing", p.BrewingGetHandler)
-
 	brewingRoutes.POST("/brewing", p.BrewingPostHandler)
-
+	brewingRoutes.PUT("/brewing", p.BrewingPutHandler)
 	brewingRoutes.DELETE("/brewing", p.BrewingDeleteHandler)
 
 	return router.RouteGroup{Group: brewingRoutes}
@@ -33,6 +33,10 @@ func Register(c *dig.Container, register func(...interface{}) error) error {
 	}
 
 	if err := c.Provide(makeCreateRequest, dig.Name("Route.Handler.Brewing.Post")); err != nil {
+		return err
+	}
+
+	if err := c.Provide(makeUpdateByIdRequest, dig.Name("Route.Handler.Brewing.Put")); err != nil {
 		return err
 	}
 

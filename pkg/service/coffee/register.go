@@ -5,6 +5,7 @@ func Register(register func(...interface{}) error) error {
 		makeSaveBrewingMethod,
 		makeGetBrewingMethod,
 		makeGetBrewingMethodByName,
+		makeUpdateBrewingMethod,
 		makeDeleteBrewingMethod,
 	)
 }

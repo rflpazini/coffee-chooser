@@ -18,6 +18,7 @@ const (
 	getBrewingMethod       = "get-brewing-method"
 	getBrewingMethodByName = "get-brewing-method-by-name"
 	saveBrewingMethod      = "save-brewing-method"
+	updateBrewingMethod    = "update-brewing-method"
 	deleteBrewingMethod    = "delete-brewing-method"
 )
 
@@ -72,24 +73,58 @@ func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 
 		input.Name = strings.ToLower(input.Name)
 		input.UpdatedAt = time.Now()
+		input.CreatedAt = time.Now()
 
-		saveErr := make(chan error)
-		go func(ch chan error) {
-			err := p.SaveBrewingMethod(r.Context(), input)
+		res := make(chan coffee.BrewingUpdateRoutineResponse)
+		go func(ch chan coffee.BrewingUpdateRoutineResponse) {
+			id, err := p.SaveBrewingMethod(r.Context(), input)
 			if err != nil {
 				log.Error().Err(err).Msgf("error saving to DB: %s", err.Error())
-				ch <- err
+				ch <- coffee.BrewingUpdateRoutineResponse{Err: err.Error()}
 			}
-		}(saveErr)
+			ch <- coffee.BrewingUpdateRoutineResponse{ID: id}
+		}(res)
 
-		err := <-saveErr
-		close(saveErr)
-
-		if err != nil {
-			return echo.NewHTTPError(http.StatusConflict, err.Error())
+		errResponse := <-res
+		if errResponse.Err != "" {
+			return echo.NewHTTPError(http.StatusConflict, errResponse.Err)
 		}
 
-		return c.NoContent(http.StatusCreated)
+		close(res)
+		return c.JSON(http.StatusCreated, errResponse)
+	}
+}
+
+type makeUpdateParams struct {
+	dig.In
+
+	coffee.UpdateBrewingMethod
+}
+
+func makeUpdateByIdRequest(p makeUpdateParams) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		r := c.Request()
+		var input coffee.BrewingRequest
+
+		id := c.QueryParam("id")
+		if id == "" {
+			return c.JSON(http.StatusBadRequest, "id is required")
+		}
+
+		if err := c.Bind(&input); err != nil {
+			return err
+		}
+
+		r = r.WithContext(context.WithValue(context.Background(), updateBrewingMethod, input))
+		input.Name = strings.ToLower(input.Name)
+		input.UpdatedAt = time.Now()
+
+		err := p.UpdateBrewingMethod(r.Context(), input, id)
+		if err != nil {
+			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
+		}
+
+		return c.NoContent(http.StatusOK)
 	}
 }
 
