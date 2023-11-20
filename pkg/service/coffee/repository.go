@@ -7,18 +7,20 @@ import (
 	"coffee-choose/pkg/database"
 	"github.com/rs/zerolog/log"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type SaveBrewingMethod func(ctx context.Context, brewing BrewingRequest) error
+type SaveBrewingMethod func(ctx context.Context, brewing BrewingRequest) (string, error)
 
 func makeSaveBrewingMethod(coll database.BrewingCollection) SaveBrewingMethod {
-	return func(ctx context.Context, req BrewingRequest) error {
-		filter := bson.M{"name": req.Name}
+	return func(ctx context.Context, req BrewingRequest) (string, error) {
+		filter := bson.M{"name": bson.M{"$eq": req.Name}}
 		var result BrewingResponse
 
 		err := coll.FindOne(ctx, filter).Decode(&result)
-		if &result != nil {
-			return errors.New("brewing method already exists: " + req.Name)
+		if !errors.Is(err, mongo.ErrNoDocuments) {
+			return "", errors.New("brewing method already exists: " + req.Name)
 		}
 
 		brewingData := bson.M{
@@ -30,12 +32,16 @@ func makeSaveBrewingMethod(coll database.BrewingCollection) SaveBrewingMethod {
 		res, err := coll.InsertOne(ctx, brewingData)
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to insert into the database")
-			return err
+			return "", err
 		}
 
-		log.Info().Msgf("Inserted %v into the database", res.InsertedID)
+		var insertedId string
+		if oid, ok := res.InsertedID.(primitive.ObjectID); ok {
+			insertedId = oid.Hex()
+			log.Info().Msgf("Inserted %v into the database", insertedId)
+		}
 
-		return nil
+		return insertedId, nil
 	}
 }
 
@@ -68,16 +74,35 @@ type GetBrewingMethodByName func(ctx context.Context, name string) (*BrewingResp
 
 func makeGetBrewingMethodByName(coll database.BrewingCollection) GetBrewingMethodByName {
 	return func(ctx context.Context, name string) (*BrewingResponse, error) {
-		filter := bson.M{"name": name}
+		filter := bson.M{"name": bson.M{"$eq": name}}
 		var result BrewingResponse
 
 		err := coll.FindOne(ctx, filter).Decode(&result)
-		if err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
 			log.Error().Err(err).Msgf("failed to find the brewing method with name: %s", name)
 			return &BrewingResponse{}, err
 		}
 
 		return &result, nil
+	}
+}
+
+type UpdateBrewingMethod func(ctx context.Context, brewing BrewingRequest, id string) error
+
+func makeUpdateBrewingMethod(coll database.BrewingCollection) UpdateBrewingMethod {
+	return func(ctx context.Context, req BrewingRequest, id string) error {
+		objID, _ := primitive.ObjectIDFromHex(id)
+		filter := bson.M{"_id": bson.M{"$eq": objID}}
+
+		update := bson.D{{"$set", req}}
+
+		_, err := coll.UpdateOne(ctx, filter, update)
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to update the database")
+			return err
+		}
+
+		return nil
 	}
 }
 

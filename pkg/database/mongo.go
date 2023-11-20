@@ -67,17 +67,17 @@ func makeMongoDB(p mongodbParams) (MongoDB, error) {
 
 type Ping func() error
 
-func makeMongoPing(mongo *mongo.Database) Ping {
+func makeMongoPing(mongo MongoClient) Ping {
 	return func() error {
-		return mongo.Client().Ping(context.Background(), readpref.PrimaryPreferred())
+		return mongo.Ping(context.Background(), readpref.PrimaryPreferred())
 	}
 }
 
 type Disconnect func() error
 
-func makeMongoDisconnect(mongo *mongo.Database) Disconnect {
+func makeMongoDisconnect(mongo MongoClient) Disconnect {
 	return func() error {
-		return mongo.Client().Disconnect(context.Background())
+		return mongo.Disconnect(context.Background())
 	}
 }
 

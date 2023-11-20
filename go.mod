@@ -14,6 +14,7 @@ require (
 )
 
 require (
+	github.com/brianvoe/gofakeit/v6 v6.24.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
