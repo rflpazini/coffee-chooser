@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine as base
+FROM golang:1.23-alpine as base
 LABEL authors="rflpazini@gmail.com"
 
 RUN apk add --no-cache curl
@@ -17,7 +17,7 @@ RUN --mount=type=cache,target=/root/.cache \
 COPY . ./
 RUN make build
 
-FROM alpine:3.18
+FROM alpine:latest
 WORKDIR /app
 
 RUN apk -U upgrade && \
