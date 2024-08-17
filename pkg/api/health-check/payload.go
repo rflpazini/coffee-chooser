@@ -7,14 +7,21 @@ type Response struct {
 }
 
 type App struct {
-	Name      string   `json:"name"`
-	Version   string   `json:"version"`
-	GoVersion string   `json:"goVersion"`
-	Codebase  Codebase `json:"codebase,omitempty"`
+	Name        string       `json:"name"`
+	Version     string       `json:"version"`
+	GoVersion   string       `json:"goVersion"`
+	Codebase    *Codebase    `json:"codebase,omitempty"`
+	Environment *Environment `json:"environment,omitempty"`
 }
 
 type Codebase struct {
-	CommitHash string `json:"commit,omitempty"`
 	Branch     string `json:"branch,omitempty"`
+	CommitHash string `json:"commit,omitempty"`
 	Repository string `json:"repository,omitempty"`
+}
+
+type Environment struct {
+	Name       string `json:"name,omitempty"`
+	Region     string `json:"region,omitempty"`
+	InstanceId string `json:"instanceId,omitempty"`
 }

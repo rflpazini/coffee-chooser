@@ -1,0 +1,79 @@
+name: publish staging pre-release
+
+on:
+  push:
+    tags:
+      - "v*.*.*-beta.*"
+
+env:
+  AWS_PEM_FILE_NAME: ${{ secrets.AWS_PEM }}.pem
+  REGISTRY_IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ vars.APP_NAME }}
+  AWS_INSTANCE: ${{ secrets.AWS_USERNAME }}@${{ secrets.AWS_HOSTNAME }}
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.meta.outputs.tags }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Get tag name
+        id: meta
+        run: |
+          echo "BRANCH=$(echo ${GITHUB_REF#refs/heads/})" >> "$GITHUB_ENV"
+          VERSION=${GITHUB_REF_NAME#v}
+          echo App: ${{ vars.APP_NAME }}
+          echo Version: $VERSION
+          echo "tags=$(echo $VERSION)" >> "$GITHUB_OUTPUT"
+
+      - name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ env.REGISTRY_IMAGE }}:${{ steps.meta.outputs.tags }}
+          build-args: |
+            APP_VERSION=${{ steps.meta.outputs.tags }}
+            MONGODB_URL=${{ secrets.MONGO_CONNECTION_STRING }}
+            BRANCH_NAME=${{ env.BRANCH }}
+          platforms: linux/amd64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          
+  deploy:
+    needs: docker-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set Docker image name
+        run: |
+          echo "DOCKER_IMAGE_NAME=${{ env.REGISTRY_IMAGE }}:${{ needs.docker-build.outputs.version }}" >> "$GITHUB_ENV"
+      - name: Set permissions for private key
+        run: |
+          echo "${{ secrets.AWS_SECRET_KEY }}" > ${{ env.AWS_PEM_FILE_NAME }}
+          chmod 600 ${{ env.AWS_PEM_FILE_NAME }}
+      - name: Pull Docker image
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker pull ${{ env.DOCKER_IMAGE_NAME }}'
+      - name: Stop running container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker stop ${{ vars.APP_NAME }} || true'
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker rm ${{ vars.APP_NAME }} || true'
+      - name: Run new container
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ env.AWS_PEM_FILE_NAME }} ${{ env.AWS_INSTANCE }} 'docker run -d --name ${{ vars.APP_NAME }} --env-file env-file.txt -p 80:8080 ${{ env.DOCKER_IMAGE_NAME }}'

@@ -12,11 +12,19 @@ import (
 	"go.uber.org/dig"
 )
 
+const (
+	BrewingCollectionName = "brewing"
+)
+
 type MongoClient interface {
 	Connect(ctx context.Context) error
 	Disconnect(ctx context.Context) error
 	Ping(ctx context.Context, rp *readpref.ReadPref) error
 	Database(name string, opts ...*options.DatabaseOptions) *mongo.Database
+}
+
+type MongoDB interface {
+	Collection(name string, opts ...*options.CollectionOptions) *mongo.Collection
 }
 
 type mongoClientParams struct {
@@ -41,7 +49,7 @@ type mongodbParams struct {
 	*config.MongoConfig
 }
 
-func makeMongoDB(p mongodbParams) (*mongo.Database, error) {
+func makeMongoDB(p mongodbParams) (MongoDB, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(p.Timeout)*time.Second)
 	defer cancel()
 
@@ -59,16 +67,50 @@ func makeMongoDB(p mongodbParams) (*mongo.Database, error) {
 
 type Ping func() error
 
-func makeMongoPing(mongo *mongo.Database) Ping {
+func makeMongoPing(mongo MongoClient) Ping {
 	return func() error {
-		return mongo.Client().Ping(context.Background(), readpref.PrimaryPreferred())
+		return mongo.Ping(context.Background(), readpref.PrimaryPreferred())
 	}
 }
 
 type Disconnect func() error
 
-func makeMongoDisconnect(mongo *mongo.Database) Disconnect {
+func makeMongoDisconnect(mongo MongoClient) Disconnect {
 	return func() error {
-		return mongo.Client().Disconnect(context.Background())
+		return mongo.Disconnect(context.Background())
 	}
+}
+
+type Decode interface {
+	Decode(val interface{}) error
+}
+
+type Cursor interface {
+	Next(ctx context.Context) bool
+	Decode
+	Err() error
+	Close(ctx context.Context) error
+}
+
+type MongoCollection interface {
+	Find(ctx context.Context, filter interface{},
+		opts ...*options.FindOptions) (cur *mongo.Cursor, err error)
+	FindOne(ctx context.Context, filter interface{},
+		opts ...*options.FindOneOptions) *mongo.SingleResult
+	UpdateOne(ctx context.Context, filter interface{}, update interface{},
+		opts ...*options.UpdateOptions) (*mongo.UpdateResult, error)
+	UpdateMany(ctx context.Context, filter interface{}, update interface{},
+		opts ...*options.UpdateOptions) (*mongo.UpdateResult, error)
+	BulkWrite(ctx context.Context, models []mongo.WriteModel,
+		opts ...*options.BulkWriteOptions) (*mongo.BulkWriteResult, error)
+	InsertOne(ctx context.Context, document interface{},
+		opts ...*options.InsertOneOptions) (*mongo.InsertOneResult, error)
+	DeleteOne(ctx context.Context, filter interface{},
+		opts ...*options.DeleteOptions) (*mongo.DeleteResult, error)
+}
+
+type BrewingCollection MongoCollection
+
+func makeBrewingCollection(mongo MongoDB) BrewingCollection {
+	return mongo.Collection(BrewingCollectionName)
 }

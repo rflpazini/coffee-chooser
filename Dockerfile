@@ -1,4 +1,4 @@
-FROM golang:1.21-alpine as base
+FROM golang:1.23-alpine as base
 LABEL authors="rflpazini@gmail.com"
 
 RUN apk add --no-cache curl
@@ -17,8 +17,19 @@ RUN --mount=type=cache,target=/root/.cache \
 COPY . ./
 RUN make build
 
-FROM alpine:3.18
+FROM alpine:latest
 WORKDIR /app
+
+RUN apk -U upgrade && \
+    rm -rf /var/cache/apk/*
+
+ARG APP_VERSION
+ARG MONGODB_URL
+ARG BRANCH_NAME
+
+ENV APP_VERSION ${APP_VERSION}
+ENV MONGODB_URL ${MONGODB_URL}
+ENV BRANCH_NAME ${BRANCH_NAME}
 
 COPY --from=builder /go/src/config/ ./config/
 COPY --from=builder /go/src/bin/coffee-chooser .

@@ -37,14 +37,28 @@ func makeHealthCheckHandler(p makeHealthCheckParams) echo.HandlerFunc {
 				Name:      p.ServerConfig.AppName,
 				Version:   p.ServerConfig.AppVersion,
 				GoVersion: goVersion,
-				Codebase: Codebase{
+				Codebase: &Codebase{
 					Repository: p.ServerConfig.Repository,
 					CommitHash: commitHash,
-					Branch:     os.Getenv("BRANCH"),
+					Branch:     os.Getenv("BRANCH_NAME"),
+				},
+				Environment: &Environment{
+					Name:       hostName(),
+					Region:     os.Getenv("EC2_REGION"),
+					InstanceId: os.Getenv("INSTANCE_ID"),
 				},
 			},
 		}
 
 		return c.JSON(http.StatusOK, rsp)
 	}
+}
+
+func hostName() (name string) {
+	name, _ = os.Hostname()
+	if os.Getenv("STACK") != "" {
+		name = os.Getenv("STACK")
+	}
+
+	return
 }

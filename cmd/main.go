@@ -6,7 +6,6 @@ import (
 	"coffee-choose/pkg/database"
 	"coffee-choose/server"
 	"github.com/rs/zerolog/log"
-	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/dig"
 )
 
@@ -28,7 +27,7 @@ func main() {
 			return err
 		}
 
-		if err := container.Invoke(func(mongodb *mongo.Database, ping database.Ping, disconnect database.Disconnect) error {
+		if err := container.Invoke(func(mongodb database.MongoDB, ping database.Ping, disconnect database.Disconnect) error {
 			if err := ping(); err != nil {
 				log.Err(err).Msg("failed to ping database")
 				panic(err)
