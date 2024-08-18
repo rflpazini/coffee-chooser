@@ -1,17 +1,17 @@
 version: '3'
 
 services:
-#  api:
-#    build: .
-#    ports:
-#      - '8080:8080'
-#    restart: always
-#    environment:
-#      MONGODB_URL: mongodb://dev:passdev@mongo:27017/
-#    volumes:
-#      - .:/src
-#    depends_on:
-#      - mongo
+  #  api:
+  #    build: .
+  #    ports:
+  #      - '8080:8080'
+  #    restart: always
+  #    environment:
+  #      MONGODB_URL: mongodb://dev:passdev@mongo:27017/
+  #    volumes:
+  #      - .:/src
+  #    depends_on:
+  #      - mongo
 
 
   mongo:
@@ -42,6 +42,19 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://dev:passdev@mongo:27017/
     networks:
       - chooser-cafe-network
+  mindsdb:
+    image: mindsdb/mindsdb
+    container_name: coffee_mindsdb
+    restart: always
+    ports:
+      - "47334:47334" # Porta do MindsDB
+    environment:
+      MINDSDB_CONFIG_DEFAULT_STORAGE: 'mongodb://mongodb:27017'
+    depends_on:
+      - mongo
+    networks:
+      - chooser-cafe-network
+
 
 networks:
   chooser-cafe-network:

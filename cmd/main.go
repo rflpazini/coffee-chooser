@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 
+	"coffee-choose/internal/server"
 	"coffee-choose/pkg/database"
-	"coffee-choose/server"
 	"github.com/rs/zerolog/log"
 	"go.uber.org/dig"
 )

@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	BrewingCollectionName = "brewing"
+	UserPreferencesCollectionName = "user_preferences"
 )
 
 type MongoClient interface {
@@ -109,8 +109,8 @@ type MongoCollection interface {
 		opts ...*options.DeleteOptions) (*mongo.DeleteResult, error)
 }
 
-type BrewingCollection MongoCollection
+type PreferencesCollection MongoCollection
 
-func makeBrewingCollection(mongo MongoDB) BrewingCollection {
-	return mongo.Collection(BrewingCollectionName)
+func makeBrewingCollection(mongo MongoDB) PreferencesCollection {
+	return mongo.Collection(UserPreferencesCollectionName)
 }
