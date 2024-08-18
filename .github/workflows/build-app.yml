@@ -22,16 +22,6 @@ jobs:
       - name: Build binary
         run: make build
 
-      - run: 'echo "$SSH_KEY" | base64'
-        shell: bash
-        env:
-          SSH_KEY: ${{secrets.AWS_PEM}}
-
-      - run: 'echo "$KEY" | base64'
-        shell: bash
-        env:
-          KEY: ${{secrets.AWS_SECRET_KEY}}
-
   unit-tests:
     runs-on: ubuntu-latest
     needs: go-build
