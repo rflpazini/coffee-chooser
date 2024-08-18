@@ -3,6 +3,7 @@ module coffee-choose
 go 1.23
 
 require (
+	github.com/brianvoe/gofakeit/v6 v6.28.0
 	github.com/cristalhq/aconfig v0.18.5
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/labstack/echo/v4 v4.12.0
