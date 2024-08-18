@@ -5,7 +5,6 @@ import (
 
 	"coffee-choose/internal/router"
 	"coffee-choose/internal/server"
-	"coffee-choose/pkg/api/coffee"
 	"coffee-choose/pkg/api/health-check"
 	"coffee-choose/pkg/api/recommend"
 	"coffee-choose/pkg/config"
@@ -41,10 +40,8 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 	if err := healthcheck.Register(c, register); err != nil {
 		return err
 	}
-	if err := coffee.Register(c, register); err != nil {
-		return err
-	}
 	if err := recommend.Register(c, register); err != nil {
+		return err
 	}
 
 	return nil

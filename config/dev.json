@@ -9,5 +9,8 @@
     "uri": "mongodb://dev:passdev@localhost:27017/",
     "name": "coffee-chooser",
     "timeout": 30000
+  },
+  "mindsDB" : {
+    "url": "http://coffee_mindsdb:47334/api/predict"
   }
 }
