@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   #  api:
   #    build: .
@@ -43,13 +41,12 @@ services:
     networks:
       - chooser-cafe-network
   mindsdb:
-    image: mindsdb/mindsdb
-    container_name: coffee_mindsdb
+    image: mindsdb/mindsdb:lightwood
     restart: always
     ports:
       - "47334:47334" # Porta do MindsDB
     environment:
-      MINDSDB_CONFIG_DEFAULT_STORAGE: 'mongodb://mongodb:27017'
+      MINDSDB_CONFIG_DEFAULT_STORAGE: 'mongodb://dev:passdev@mongo:27017'
     depends_on:
       - mongo
     networks:

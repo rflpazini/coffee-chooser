@@ -5,10 +5,10 @@ import "time"
 
 //easyjson:json
 type UserPreferences struct {
-	Sweetness         string    `json:"sweetness" bson:"sweetness"`
-	Strength          string    `json:"strength" bson:"strength"`
-	FlavorNotes       string    `json:"flavor_notes" bson:"flavor_notes"`
-	Body              string    `json:"body" bson:"body"`
+	Sweetness         string    `json:"sweetness" bson:"sweetness" validate:"required"`
+	Strength          string    `json:"strength" bson:"strength" validate:"required"`
+	FlavorNotes       string    `json:"flavor_notes" bson:"flavor_notes" validate:"required"`
+	Body              string    `json:"body" bson:"body" validate:"required"`
 	RecommendedCoffee string    `json:"recommended_coffee,omitempty" bson:"recommended_coffee"`
 	RecommendedBeans  string    `json:"recommended_beans,omitempty" bson:"recommended_beans"`
 	ExtractionMethod  string    `json:"extraction_method,omitempty" bson:"extraction_method"`

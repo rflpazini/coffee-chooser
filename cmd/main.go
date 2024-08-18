@@ -5,6 +5,7 @@ import (
 
 	"coffee-choose/internal/server"
 	"coffee-choose/pkg/database"
+	"coffee-choose/pkg/utils"
 	"github.com/rs/zerolog/log"
 	"go.uber.org/dig"
 )
@@ -16,7 +17,7 @@ func main() {
 		ctx, cancel := context.WithCancel(context.Background())
 		defer cancel()
 
-		cfg, err := NewConfig()
+		cfg, err := utils.NewConfig()
 		if err != nil {
 			log.Error().Err(err).Msg("config load failure")
 			return err

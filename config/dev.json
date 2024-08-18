@@ -2,7 +2,7 @@
   "server": {
     "port": 8080,
     "appName": "coffee-chooser",
-    "appVersion": "v0.0.1",
+    "appVersion": "alpha",
     "repository": "https://github.com/rflpazini/coffee-chooser"
   },
   "mongo": {
@@ -10,7 +10,7 @@
     "name": "coffee-chooser",
     "timeout": 30000
   },
-  "mindsDB" : {
-    "url": "http://coffee_mindsdb:47334/api/predict"
+  "minds" : {
+    "url": "http://localhost:47334/api/predict"
   }
 }

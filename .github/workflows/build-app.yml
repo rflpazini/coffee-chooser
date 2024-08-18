@@ -45,6 +45,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - run: 'echo "$SSH_KEY" > key'
+        shell: bash
+        env:
+          SSH_KEY: ${{secrets.SSH_KEY}}
+
       - name: Git variables
         shell: bash
         run: |

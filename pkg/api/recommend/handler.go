@@ -23,7 +23,13 @@ func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 		var input recommend.UserPreferences
 
 		if err := c.Bind(&input); err != nil {
+			log.Error().Err(err).Msgf("binding request failed: %s", err.Error())
 			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+		}
+
+		if err := c.Validate(&input); err != nil {
+			log.Error().Err(err).Msgf("saving request validate failed: %s", err.Error())
+			return echo.NewHTTPError(http.StatusBadRequest, "all fields must be filled")
 		}
 
 		input.FlavorNotes = strings.ToLower(input.FlavorNotes)
