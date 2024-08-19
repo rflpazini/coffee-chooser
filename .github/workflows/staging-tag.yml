@@ -1,6 +1,8 @@
 name: tag pre-release
 
 on:
+  push:
+    branches: [ "staging" ]
   pull_request:
     types:
       - closed
