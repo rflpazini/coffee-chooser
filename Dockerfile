@@ -35,6 +35,7 @@ COPY --from=builder /go/src/config/ ./config/
 COPY --from=builder /go/src/bin/coffee-chooser .
 
 EXPOSE 8080
+EXPOSE 443
 
 ENTRYPOINT ["/app/coffee-chooser"]
 
