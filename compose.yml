@@ -13,16 +13,14 @@ services:
 
 
   mongo:
-    restart: always
     image: mongo:latest
     environment:
-      MONGO_INITDB_ROOT_USERNAME: dev
-      MONGO_INITDB_ROOT_PASSWORD: passdev
-    ports:
-      - '27017:27017'
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: coffee-chooser
     volumes:
-      - ./scripts/mongo-init.js:/scripts/mongo-init.js:ro
-      - ./Docker/Volumes/MongoDB:/data/db
+      - ./scripts/mongo-init.js://docker-entrypoint-initdb.d/mongo-init.js:ro
+      - .data/docker/volumes/mongodb:/data/db
     networks:
       - chooser-cafe-network
   mongo-express:
