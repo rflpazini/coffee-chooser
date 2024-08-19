@@ -1,4 +1,4 @@
-package main
+package utils
 
 import (
 	"os"
@@ -28,6 +28,11 @@ func NewConfig() (*config.Config, error) {
 	mongo := os.Getenv("MONGODB_URL")
 	if mongo != "" {
 		cfg.Mongo.URI = mongo
+	}
+
+	minds := os.Getenv("MINDS_URL")
+	if minds != "" {
+		cfg.Minds.URL = minds
 	}
 
 	version := os.Getenv("APP_VERSION")

@@ -3,7 +3,7 @@ package healthcheck
 import (
 	"net/http"
 
-	"coffee-choose/router"
+	"coffee-choose/internal/router"
 	"github.com/labstack/echo/v4"
 	"go.uber.org/dig"
 )

@@ -8,8 +8,8 @@ import (
 	"syscall"
 	"time"
 
+	"coffee-choose/internal/router"
 	"coffee-choose/pkg/config"
-	"coffee-choose/router"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

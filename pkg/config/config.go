@@ -7,6 +7,7 @@ import "time"
 type Config struct {
 	Server *ServerConfig `json:"server"`
 	Mongo  *MongoConfig  `json:"mongo"`
+	Minds  *MindsConfig  `json:"minds"`
 }
 
 type ServerConfig struct {
@@ -30,4 +31,8 @@ type MongoConfig struct {
 	URI     string `json:"uri"`
 	Name    string `json:"name"`
 	Timeout int    `json:"timeout"`
+}
+
+type MindsConfig struct {
+	URL string `json:"url"`
 }
