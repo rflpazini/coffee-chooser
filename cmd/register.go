@@ -9,6 +9,7 @@ import (
 	"coffee-choose/pkg/api/recommend"
 	"coffee-choose/pkg/config"
 	"coffee-choose/pkg/database"
+	"coffee-choose/pkg/service/geo"
 	recommendService "coffee-choose/pkg/service/recommend"
 	"go.uber.org/dig"
 )
@@ -32,7 +33,12 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 		return err
 	}
 
+	// Services
 	if err := recommendService.Register(register); err != nil {
+		return err
+	}
+
+	if err := geo.Register(register); err != nil {
 		return err
 	}
 

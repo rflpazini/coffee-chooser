@@ -2,34 +2,48 @@ package recommend
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"coffee-choose/pkg/database"
+	"coffee-choose/pkg/service/geo"
 	"github.com/rs/zerolog/log"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
 )
 
 type SaveUserPreferences func(ctx context.Context, p UserPreferences) (string, error)
 
-func makeSaveUserPreferences(coll database.PreferencesCollection) SaveUserPreferences {
+func makeSaveUserPreferences(coll database.PreferencesCollection, geoService geo.IPService) SaveUserPreferences {
 	return func(ctx context.Context, p UserPreferences) (string, error) {
-		filter := bson.M{
-			"sweetness":    p.Sweetness,
-			"strength":     p.Strength,
-			"flavor_notes": p.FlavorNotes,
-			"body":         p.Body,
+		uLocation, err := geoService.GetLocation(ctx, p.IPAddress)
+		if err != nil {
+			log.Error().Err(err).Msgf("Failed to get location for IP %s", p.IPAddress)
+		} else {
+			log.Info().Msgf("Location for IP %s: %+v", p.IPAddress, uLocation)
+
+			if uLocation.City.Names["en"] != "" {
+				p.Location.City = uLocation.City.Names["en"]
+			}
+
+			p.Location.Country = uLocation.Country.IsoCode
+			p.Location.Latitude = uLocation.Location.Latitude
+			p.Location.Longitude = uLocation.Location.Longitude
+			p.Location.Timezone = uLocation.Location.TimeZone
 		}
 
-		var existing UserPreferences
-		err := coll.FindOne(ctx, filter).Decode(&existing)
-		if !errors.Is(err, mongo.ErrNoDocuments) {
-			return "", errors.New("preferences already exist")
-		}
+		//filter := bson.M{
+		//	"sweetness":    p.Sweetness,
+		//	"strength":     p.Strength,
+		//	"flavor_notes": p.FlavorNotes,
+		//	"body":         p.Body,
+		//}
 
-		p.CreatedAt = time.Now()
+		//var existing UserPreferences
+		//err = coll.FindOne(ctx, filter).Decode(&existing)
+		//if !errors.Is(err, mongo.ErrNoDocuments) {
+		//	return "", errors.New("preferences already exist")
+		//}
+
+		p.CreatedAt = time.Now().Format(time.RFC3339)
 
 		res, err := coll.InsertOne(ctx, p)
 		if err != nil {

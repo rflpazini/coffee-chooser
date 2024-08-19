@@ -2,9 +2,8 @@ package recommend
 
 import (
 	"net/http"
-	"strings"
-	"time"
 
+	"coffee-choose/pkg/service/geo"
 	"coffee-choose/pkg/service/recommend"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
@@ -15,6 +14,7 @@ type makePostParams struct {
 	dig.In
 
 	SaveUserPreferences recommend.SaveUserPreferences
+	GeoIPService        geo.IPService
 }
 
 func makeCreateRequest(p makePostParams) echo.HandlerFunc {
@@ -32,9 +32,7 @@ func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "all fields must be filled")
 		}
 
-		input.FlavorNotes = strings.ToLower(input.FlavorNotes)
-		input.UpdatedAt = time.Now()
-		input.CreatedAt = time.Now()
+		input.IPAddress = c.RealIP()
 
 		res := make(chan recommend.SaveResponse)
 		go func(ch chan recommend.SaveResponse) {
