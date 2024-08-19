@@ -32,6 +32,7 @@ ENV MONGODB_URL ${MONGODB_URL}
 ENV BRANCH_NAME ${BRANCH_NAME}
 
 COPY --from=builder /go/src/config/ ./config/
+COPY --from=builder /go/src/scripts/ ./scripts/
 COPY --from=builder /go/src/bin/coffee-chooser .
 
 EXPOSE 8080
