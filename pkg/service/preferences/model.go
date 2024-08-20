@@ -1,5 +1,5 @@
 //go:generate easyjson -lower_camel_case $GOFILE
-package recommend
+package preferences
 
 //easyjson:json
 type UserPreferences struct {

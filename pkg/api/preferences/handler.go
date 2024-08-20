@@ -1,10 +1,10 @@
-package recommend
+package preferences
 
 import (
 	"net/http"
 
 	"coffee-choose/pkg/service/geo"
-	"coffee-choose/pkg/service/recommend"
+	"coffee-choose/pkg/service/preferences"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 	"go.uber.org/dig"
@@ -13,14 +13,14 @@ import (
 type makePostParams struct {
 	dig.In
 
-	SaveUserPreferences recommend.SaveUserPreferences
+	SaveUserPreferences preferences.SaveUserPreferences
 	GeoIPService        geo.IPService
 }
 
 func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		r := c.Request()
-		var input recommend.UserPreferences
+		var input preferences.UserPreferences
 
 		if err := c.Bind(&input); err != nil {
 			log.Error().Err(err).Msgf("binding request failed: %s", err.Error())
@@ -34,15 +34,15 @@ func makeCreateRequest(p makePostParams) echo.HandlerFunc {
 
 		input.IPAddress = c.RealIP()
 
-		res := make(chan recommend.SaveResponse)
-		go func(ch chan recommend.SaveResponse) {
+		res := make(chan preferences.SaveResponse)
+		go func(ch chan preferences.SaveResponse) {
 			id, err := p.SaveUserPreferences(r.Context(), input)
 			if err != nil {
 				log.Error().Err(err).Msgf("error saving to DB: %s", err.Error())
-				ch <- recommend.SaveResponse{Err: err.Error()}
+				ch <- preferences.SaveResponse{Err: err.Error()}
 				return
 			}
-			ch <- recommend.SaveResponse{ID: id}
+			ch <- preferences.SaveResponse{ID: id}
 		}(res)
 
 		errResponse := <-res

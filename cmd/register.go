@@ -6,11 +6,13 @@ import (
 	"coffee-choose/internal/router"
 	"coffee-choose/internal/server"
 	"coffee-choose/pkg/api/health-check"
-	"coffee-choose/pkg/api/recommend"
+	"coffee-choose/pkg/api/preferences"
+	"coffee-choose/pkg/api/recommendation"
 	"coffee-choose/pkg/config"
 	"coffee-choose/pkg/database"
 	"coffee-choose/pkg/service/geo"
-	recommendService "coffee-choose/pkg/service/recommend"
+	preferencesService "coffee-choose/pkg/service/preferences"
+	//recommendationService "coffee-choose/pkg/service/recommendation"
 	"go.uber.org/dig"
 )
 
@@ -34,7 +36,7 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 	}
 
 	// Services
-	if err := recommendService.Register(register); err != nil {
+	if err := preferencesService.Register(register); err != nil {
 		return err
 	}
 
@@ -46,7 +48,10 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 	if err := healthcheck.Register(c, register); err != nil {
 		return err
 	}
-	if err := recommend.Register(c, register); err != nil {
+	if err := preferences.Register(c, register); err != nil {
+		return err
+	}
+	if err := recommendation.Register(c, register); err != nil {
 		return err
 	}
 
