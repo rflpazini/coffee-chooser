@@ -15,7 +15,6 @@ import (
 	"coffee-choose/pkg/service/geo"
 	opService "coffee-choose/pkg/service/openaiClient"
 	preferencesService "coffee-choose/pkg/service/preferences"
-	recommendationService "coffee-choose/pkg/service/recommendation"
 
 	"go.uber.org/dig"
 )
@@ -49,10 +48,6 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 	}
 
 	if err := coffeeTypes.Register(register); err != nil {
-		return err
-	}
-
-	if err := recommendationService.Register(register); err != nil {
 		return err
 	}
 

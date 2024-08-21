@@ -54,6 +54,7 @@ func main() {
 
 		return nil
 	}(); err != nil {
+		log.Error().Err(err).Msg("error")
 		panic(err)
 	}
 }
