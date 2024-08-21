@@ -30,9 +30,9 @@ func NewConfig() (*config.Config, error) {
 		cfg.Mongo.URI = mongo
 	}
 
-	minds := os.Getenv("MINDS_URL")
+	minds := os.Getenv("OPENAI_KEY")
 	if minds != "" {
-		cfg.Minds.URL = minds
+		cfg.OpenAI.Key = minds
 	}
 
 	version := os.Getenv("APP_VERSION")

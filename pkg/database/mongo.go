@@ -14,6 +14,7 @@ import (
 
 const (
 	UserPreferencesCollectionName = "user_preferences"
+	CoffeeVarietyCollectionName   = "coffee_types"
 )
 
 type MongoClient interface {
@@ -111,6 +112,12 @@ type MongoCollection interface {
 
 type PreferencesCollection MongoCollection
 
-func makeBrewingCollection(mongo MongoDB) PreferencesCollection {
+func makePreferencesCollection(mongo MongoDB) PreferencesCollection {
 	return mongo.Collection(UserPreferencesCollectionName)
+}
+
+type CoffeeVarietyCollection MongoCollection
+
+func makeCoffeeVarietyCollection(mongo MongoDB) CoffeeVarietyCollection {
+	return mongo.Collection(CoffeeVarietyCollectionName)
 }

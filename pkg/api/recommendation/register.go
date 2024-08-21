@@ -10,13 +10,13 @@ type coffeeRoutesParams struct {
 	dig.In
 
 	*echo.Echo
-	SaveRecommendationHandler echo.HandlerFunc `name:"Route.Handler.Coffee.Recommendation.Get"`
+	GetRecommendationHandler echo.HandlerFunc `name:"Route.Handler.Coffee.Recommendation.Get"`
 }
 
 func setupCoffeeRecommendationRoutes(p coffeeRoutesParams) router.RouteGroup {
 	coffeeRoutes := p.Echo.Group("/v1")
 
-	coffeeRoutes.GET("/recommendation", p.SaveRecommendationHandler)
+	coffeeRoutes.GET("/recommendation", p.GetRecommendationHandler)
 
 	return router.RouteGroup{Group: coffeeRoutes}
 }

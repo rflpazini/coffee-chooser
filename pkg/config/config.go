@@ -7,7 +7,7 @@ import "time"
 type Config struct {
 	Server *ServerConfig `json:"server"`
 	Mongo  *MongoConfig  `json:"mongo"`
-	Minds  *MindsConfig  `json:"minds"`
+	OpenAI *OpenAIConfig `json:"openai"`
 }
 
 type ServerConfig struct {
@@ -33,6 +33,6 @@ type MongoConfig struct {
 	Timeout int    `json:"timeout"`
 }
 
-type MindsConfig struct {
-	URL string `json:"url"`
+type OpenAIConfig struct {
+	Key string `json:"key"`
 }

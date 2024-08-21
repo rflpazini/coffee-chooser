@@ -10,7 +10,7 @@
     "name": "coffee-chooser",
     "timeout": 30000
   },
-  "minds" : {
-    "url": "http://localhost:47334/api/predict"
+  "openai": {
+    "key": "sk-svcacct-_Lddj0Wf43yPG_nuuDcIzfuAMVzKv6FCiht-7uNSMOdPEeK-bPHT3BlbkFJJP71jNvXFejZJM8CyVCCHQ3blnoXN5WVt-4uYN1cTfycDOn8QKgA"
   }
 }

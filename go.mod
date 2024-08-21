@@ -10,6 +10,7 @@ require (
 	github.com/mailru/easyjson v0.7.7
 	github.com/oschwald/geoip2-golang v1.11.0
 	github.com/rs/zerolog v1.33.0
+	github.com/sashabaranov/go-openai v1.28.2
 	github.com/stretchr/testify v1.9.0
 	go.mongodb.org/mongo-driver v1.16.1
 	go.uber.org/dig v1.18.0
