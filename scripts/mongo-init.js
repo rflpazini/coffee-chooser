@@ -9,7 +9,10 @@ db.coffee_types.insertMany([
         "strength": "moderately_strong",
         "flavor_notes": ["fruity", "floral"],
         "body": "full",
-        "description": "arara is a brazilian coffee variety known for its vibrant fruity and floral profile, with a balanced sweetness and a full-bodied taste.",
+        "description": {
+            "en": "Arara is a Brazilian coffee variety known for its vibrant fruity and floral profile, with a balanced sweetness and a full-bodied taste.",
+            "pt": "Arara é uma variedade de café brasileira conhecida por seu perfil vibrante de frutas e flores, com uma doçura equilibrada e um sabor encorpado."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -19,7 +22,10 @@ db.coffee_types.insertMany([
         "strength": "mild",
         "flavor_notes": ["citrus", "jasmine"],
         "body": "light",
-        "description": "geisha is a renowned coffee variety praised for its delicate sweetness, mild strength, and light body, with complex flavor notes of citrus and jasmine.",
+        "description": {
+            "en": "Geisha is a renowned coffee variety praised for its delicate sweetness, mild strength, and light body, with complex flavor notes of citrus and jasmine.",
+            "pt": "Geisha é uma variedade de café renomada, elogiada por sua doçura delicada, força suave e corpo leve, com notas de sabor complexas de cítricos e jasmim."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -29,7 +35,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["chocolate", "nutty"],
         "body": "full",
-        "description": "mundo novo is a classic brazilian coffee variety with a strong profile, full body, and sweet notes of chocolate and nuts.",
+        "description": {
+            "en": "Mundo Novo is a classic Brazilian coffee variety with a strong profile, full body, and sweet notes of chocolate and nuts.",
+            "pt": "Mundo Novo é uma variedade clássica de café brasileira com um perfil forte, corpo encorpado e notas doces de chocolate e nozes."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -39,7 +48,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["honey", "almond"],
         "body": "medium",
-        "description": "catuai offers a well-balanced flavor with moderate sweetness and strength, complemented by honey and almond notes.",
+        "description": {
+            "en": "Catuai offers a well-balanced flavor with moderate sweetness and strength, complemented by honey and almond notes.",
+            "pt": "Catuai oferece um sabor bem equilibrado com doçura e força moderadas, complementado por notas de mel e amêndoa."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -49,7 +61,10 @@ db.coffee_types.insertMany([
         "strength": "moderately_strong",
         "flavor_notes": ["caramel", "berry"],
         "body": "full",
-        "description": "bourbon coffee is celebrated for its full body, moderately strong profile, and sweet caramel and berry notes.",
+        "description": {
+            "en": "Bourbon coffee is celebrated for its full body, moderately strong profile, and sweet caramel and berry notes.",
+            "pt": "O café Bourbon é celebrado por seu corpo encorpado, perfil moderadamente forte e notas doces de caramelo e frutas vermelhas."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -59,7 +74,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["spice", "chocolate"],
         "body": "full",
-        "description": "icatu is known for its very sweet flavor profile, strong strength, and rich notes of spice and chocolate.",
+        "description": {
+            "en": "Icatu is known for its very sweet flavor profile, strong strength, and rich notes of spice and chocolate.",
+            "pt": "Icatu é conhecido por seu perfil de sabor muito doce, força forte e notas ricas de especiarias e chocolate."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -69,7 +87,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["sweet", "clean"],
         "body": "medium",
-        "description": "typica is one of the oldest arabica varieties, known for its clean, sweet taste and balanced acidity, making it a classic choice.",
+        "description": {
+            "en": "Typica is one of the oldest arabica varieties, known for its clean, sweet taste and balanced acidity, making it a classic choice.",
+            "pt": "Typica é uma das variedades de arábica mais antigas, conhecida por seu sabor limpo e doce e acidez equilibrada, tornando-a uma escolha clássica."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -79,7 +100,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["fruity", "bright_acidity"],
         "body": "medium",
-        "description": "sl28, originating from kenya, is celebrated for its strong fruit notes and bright acidity, offering a vibrant coffee experience.",
+        "description": {
+            "en": "SL28, originating from Kenya, is celebrated for its strong fruit notes and bright acidity, offering a vibrant coffee experience.",
+            "pt": "SL28, originário do Quênia, é celebrado por suas notas frutadas fortes e acidez brilhante, oferecendo uma experiência vibrante de café."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -89,7 +113,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["rich", "fruity"],
         "body": "full",
-        "description": "sl34 is similar to sl28 but with a richer body and enhanced disease resistance, delivering a robust and fruity cup.",
+        "description": {
+            "en": "SL34 is similar to SL28 but with a richer body and enhanced disease resistance, delivering a robust and fruity cup.",
+            "pt": "SL34 é semelhante ao SL28, mas com um corpo mais rico e maior resistência a doenças, proporcionando uma xícara robusta e frutada."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -99,7 +126,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["fruity", "complex"],
         "body": "full",
-        "description": "pacamara, a hybrid of pacas and maragogipe, is known for its large beans and complex flavors, often fruity and sweet.",
+        "description": {
+            "en": "Pacamara, a hybrid of Pacas and Maragogipe, is known for its large beans and complex flavors, often fruity and sweet.",
+            "pt": "Pacamara, um híbrido de Pacas e Maragogipe, é conhecido por seus grãos grandes e sabores complexos, muitas vezes frutados e doces."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -109,7 +139,10 @@ db.coffee_types.insertMany([
         "strength": "mild",
         "flavor_notes": ["mild", "smooth"],
         "body": "light",
-        "description": "also known as 'elephant bean' due to its large size, maragogipe has a mild flavor with a smooth body, perfect for a gentle cup.",
+        "description": {
+            "en": "Also known as 'elephant bean' due to its large size, Maragogipe has a mild flavor with a smooth body, perfect for a gentle cup.",
+            "pt": "Também conhecido como 'grão elefante' devido ao seu grande tamanho, o Maragogipe tem um sabor suave com um corpo macio, perfeito para uma xícara suave."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -119,7 +152,10 @@ db.coffee_types.insertMany([
         "strength": "mild",
         "flavor_notes": ["floral", "fruity"],
         "body": "light",
-        "description": "a rare variety from colombia, pink bourbon is known for its floral aroma and fruity, complex flavors with a light body.",
+        "description": {
+            "en": "A rare variety from Colombia, Pink Bourbon is known for its floral aroma and fruity, complex flavors with a light body.",
+            "pt": "Uma variedade rara da Colômbia, o Pink Bourbon é conhecido por seu aroma floral e sabores frutados e complexos com um corpo leve."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -129,7 +165,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["earthy", "spicy"],
         "body": "full",
-        "description": "originally from indonesia, java coffee is famous for its earthy, spicy flavors, offering a unique and full-bodied experience.",
+        "description": {
+            "en": "Originally from Indonesia, Java coffee is famous for its earthy, spicy flavors, offering a unique and full-bodied experience.",
+            "pt": "Originário da Indonésia, o café Java é famoso por seus sabores terrosos e picantes, oferecendo uma experiência única e encorpada."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -139,7 +178,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["chocolatey"],
         "body": "medium",
-        "description": "mokka is a small bean with a distinct chocolatey flavor, often used in high-end blends for its rich and smooth taste.",
+        "description": {
+            "en": "Mokka is a small bean with a distinct chocolatey flavor, often used in high-end blends for its rich and smooth taste.",
+            "pt": "Mokka é um grão pequeno com um sabor distinto de chocolate, muitas vezes usado em blends de alta qualidade por seu sabor rico e suave."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -149,7 +191,10 @@ db.coffee_types.insertMany([
         "strength": "moderately_strong",
         "flavor_notes": ["fruity", "sweet"],
         "body": "full",
-        "description": "a mutation of bourbon with yellow cherries, yellow bourbon is known for its very sweet profile and balanced acidity.",
+        "description": {
+            "en": "A mutation of Bourbon with yellow cherries, Yellow Bourbon is known for its very sweet profile and balanced acidity.",
+            "pt": "Uma mutação do Bourbon com cerejas amarelas, o Yellow Bourbon é conhecido por seu perfil muito doce e acidez equilibrada."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -159,7 +204,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["bright", "fruity"],
         "body": "medium",
-        "description": "caturra is a natural mutation of bourbon, popular in latin america for its bright acidity and fruity flavor profile.",
+        "description": {
+            "en": "Caturra is a natural mutation of Bourbon, popular in Latin America for its bright acidity and fruity flavor profile.",
+            "pt": "Caturra é uma mutação natural do Bourbon, popular na América Latina por sua acidez brilhante e perfil de sabor frutado."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -169,7 +217,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["smooth", "sweet"],
         "body": "medium",
-        "description": "obata is a hybrid developed in brazil, resistant to disease with a smooth, sweet flavor profile, perfect for a balanced cup.",
+        "description": {
+            "en": "Obata is a hybrid developed in Brazil, resistant to disease with a smooth, sweet flavor profile, perfect for a balanced cup.",
+            "pt": "Obata é um híbrido desenvolvido no Brasil, resistente a doenças, com um perfil de sabor suave e doce, perfeito para uma xícara equilibrada."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -179,7 +230,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["fruity", "mild"],
         "body": "medium",
-        "description": "pacas, a mutation of bourbon, is known for its balanced cup with a hint of fruitiness, offering a mild and sweet experience.",
+        "description": {
+            "en": "Pacas, a mutation of Bourbon, is known for its balanced cup with a hint of fruitiness, offering a mild and sweet experience.",
+            "pt": "Pacas, uma mutação do Bourbon, é conhecida por sua xícara equilibrada com um toque de frutado, oferecendo uma experiência suave e doce."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -189,7 +243,10 @@ db.coffee_types.insertMany([
         "strength": "mild",
         "flavor_notes": ["mild", "sweet"],
         "body": "light",
-        "description": "also known as 'bourbon pointu,' laurina is low in caffeine and has a mild, sweet flavor, making it a unique and gentle cup.",
+        "description": {
+            "en": "Also known as 'Bourbon Pointu,' Laurina is low in caffeine and has a mild, sweet flavor, making it a unique and gentle cup.",
+            "pt": "Também conhecido como 'Bourbon Pointu', Laurina tem baixo teor de cafeína e um sabor suave e doce, tornando-o uma xícara única e suave."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -199,7 +256,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["chocolatey", "smooth"],
         "body": "medium",
-        "description": "sarchimor is a hybrid known for its disease resistance and balanced flavor profile, often with a hint of chocolate.",
+        "description": {
+            "en": "Sarchimor is a hybrid known for its disease resistance and balanced flavor profile, often with a hint of chocolate.",
+            "pt": "Sarchimor é um híbrido conhecido por sua resistência a doenças e perfil de sabor equilibrado, muitas vezes com um toque de chocolate."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -209,7 +269,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["fruity", "sweet"],
         "body": "medium",
-        "description": "villalobos is a lesser-known costa rican variety, offering a sweet and fruity flavor profile with a balanced body.",
+        "description": {
+            "en": "Villalobos is a lesser-known Costa Rican variety, offering a sweet and fruity flavor profile with a balanced body.",
+            "pt": "Villalobos é uma variedade menos conhecida da Costa Rica, oferecendo um perfil de sabor doce e frutado com um corpo equilibrado."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -219,7 +282,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["nutty", "sweet"],
         "body": "medium",
-        "description": "acaia is known for its large beans, mild acidity, and a sweet, nutty flavor profile, often used in blends or as a single-origin coffee.",
+        "description": {
+            "en": "Acaia is known for its large beans, mild acidity, and a sweet, nutty flavor profile, often used in blends or as a single-origin coffee.",
+            "pt": "Acaia é conhecida por seus grãos grandes, acidez suave e perfil de sabor doce e amendoado, muitas vezes usado em blends ou como café de origem única."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -229,7 +295,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["chocolate", "sweet"],
         "body": "full",
-        "description": "tupi is a hybrid variety known for its resistance to rust and its sweet, chocolatey flavor profile.",
+        "description": {
+            "en": "Tupi is a hybrid variety known for its resistance to rust and its sweet, chocolatey flavor profile.",
+            "pt": "Tupi é uma variedade híbrida conhecida por sua resistência à ferrugem e seu perfil de sabor doce e achocolatado."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -239,7 +308,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["fruity", "floral"],
         "body": "medium",
-        "description": "topazio is known for its balanced profile with moderate acidity and body, featuring fruity and floral notes.",
+        "description": {
+            "en": "Topazio is known for its balanced profile with moderate acidity and body, featuring fruity and floral notes.",
+            "pt": "Topazio é conhecido por seu perfil equilibrado com acidez e corpo moderados, apresentando notas frutadas e florais."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -249,7 +321,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["sweet", "mild"],
         "body": "medium",
-        "description": "sabiá is a newer variety recognized for its resistance to rust and nematodes, with a balanced flavor profile.",
+        "description": {
+            "en": "Sabiá is a newer variety recognized for its resistance to rust and nematodes, with a balanced flavor profile.",
+            "pt": "Sabiá é uma variedade mais recente, reconhecida por sua resistência à ferrugem e nematóides, com um perfil de sabor equilibrado."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -259,7 +334,10 @@ db.coffee_types.insertMany([
         "strength": "strong",
         "flavor_notes": ["chocolate", "nutty"],
         "body": "full",
-        "description": "rubí is known for its strong body and lower acidity, often exhibiting chocolate and nutty flavors.",
+        "description": {
+            "en": "Rubí is known for its strong body and lower acidity, often exhibiting chocolate and nutty flavors.",
+            "pt": "Rubí é conhecida por seu corpo forte e acidez mais baixa, muitas vezes exibindo sabores de chocolate e nozes."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -269,7 +347,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["floral", "fruity"],
         "body": "full",
-        "description": "paraiso is appreciated for its intense sweetness, floral aroma, and complex fruity flavors, making it popular among specialty coffee growers.",
+        "description": {
+            "en": "Paraiso is appreciated for its intense sweetness, floral aroma, and complex fruity flavors, making it popular among specialty coffee growers.",
+            "pt": "Paraiso é apreciado por sua doçura intensa, aroma floral e sabores frutados complexos, tornando-o popular entre os produtores de café especial."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     },
@@ -279,7 +360,10 @@ db.coffee_types.insertMany([
         "strength": "moderate",
         "flavor_notes": ["chocolate", "nutty"],
         "body": "medium",
-        "description": "oeiras is known for its smooth body and balanced acidity, with notes of chocolate and nuts, making it a popular variety in brazil.",
+        "description": {
+            "en": "Oeiras is known for its smooth body and balanced acidity, with notes of chocolate and nuts, making it a popular variety in Brazil.",
+            "pt": "Oeiras é conhecida por seu corpo suave e acidez equilibrada, com notas de chocolate e nozes, tornando-se uma variedade popular no Brasil."
+        },
         "created_at": new Date().toISOString(),
         "updated_at": new Date().toISOString()
     }

@@ -1,6 +1,8 @@
 //go:generate easyjson -lower_camel_case $GOFILE
 package openaiClient
 
+import "coffee-choose/pkg/service/coffeeTypes"
+
 //easyjson:json
 type CoffeeRecommendationsStruct struct {
 	Recommendation            *RecommendationStruct   `json:"recommendation"`
@@ -9,6 +11,6 @@ type CoffeeRecommendationsStruct struct {
 
 //easyjson:json
 type RecommendationStruct struct {
-	Variety     string `json:"variety"`
-	Description string `json:"description"`
+	Variety     string                  `json:"variety"`
+	Description coffeeTypes.Description `json:"description"`
 }

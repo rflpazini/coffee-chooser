@@ -7,11 +7,11 @@ type Response struct {
 }
 
 type App struct {
+	Codebase    *Codebase    `json:"codebase,omitempty"`
+	Environment *Environment `json:"environment,omitempty"`
 	Name        string       `json:"name"`
 	Version     string       `json:"version"`
 	GoVersion   string       `json:"goVersion"`
-	Codebase    *Codebase    `json:"codebase,omitempty"`
-	Environment *Environment `json:"environment,omitempty"`
 }
 
 type Codebase struct {

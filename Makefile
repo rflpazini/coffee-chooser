@@ -21,6 +21,7 @@ test:
 # Modules support
 
 deps:
+	go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 	go get github.com/mailru/easyjson && go install github.com/mailru/easyjson/...@latest
 	go install golang.org/x/tools/...@latest
 	go mod download

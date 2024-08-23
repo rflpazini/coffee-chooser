@@ -11,20 +11,20 @@ type Config struct {
 }
 
 type ServerConfig struct {
+	CookieName        string        `json:"cookieName"`
 	AppName           string        `json:"appName"`
-	AppVersion        string        `json:"appVersion"`
 	Port              string        `json:"port"`
 	PprofPort         string        `json:"pprofPort"`
 	Mode              string        `json:"mode"`
 	JwtSecretKey      string        `json:"jwtSecretKey"`
-	CookieName        string        `json:"cookieName"`
-	ReadTimeout       time.Duration `json:"readTimeout"`
-	WriteTimeout      time.Duration `json:"writeTimeout"`
-	SSL               bool          `json:"ssl"`
+	AppVersion        string        `json:"appVersion"`
+	Repository        string        `json:"repository"`
 	CtxDefaultTimeout time.Duration `json:"ctxDefaultTimeout"`
+	WriteTimeout      time.Duration `json:"writeTimeout"`
+	ReadTimeout       time.Duration `json:"readTimeout"`
+	SSL               bool          `json:"ssl"`
 	CSRF              bool          `json:"csrf"`
 	Debug             bool          `json:"debug"`
-	Repository        string        `json:"repository"`
 }
 
 type MongoConfig struct {

@@ -78,8 +78,8 @@ func makeRecommendationGet(p getParams) echo.HandlerFunc {
 	}
 }
 
-func searchDescription(coffeeVarieties []coffeeTypes.CoffeeVariety, recommendedVariety string) string {
-	var description string
+func searchDescription(coffeeVarieties []coffeeTypes.CoffeeVariety, recommendedVariety string) coffeeTypes.Description {
+	var description coffeeTypes.Description
 	for _, variety := range coffeeVarieties {
 		if variety.Variety == recommendedVariety {
 			description = variety.Description
