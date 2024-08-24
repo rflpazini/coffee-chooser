@@ -13,4 +13,5 @@ type CoffeeRecommendationsStruct struct {
 type RecommendationStruct struct {
 	Variety     string                  `json:"variety"`
 	Description coffeeTypes.Description `json:"description"`
+	Vendors     []coffeeTypes.Vendor    `json:"vendors,omitempty"`
 }

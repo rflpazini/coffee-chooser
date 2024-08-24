@@ -71,7 +71,7 @@ func makePostCoffeeVariety(coll database.CoffeeVarietyCollection) PostCoffeeVari
 				"flavor_notes": input.FlavorNotes,
 				"body":         input.Body,
 				"description":  input.Description,
-				"link":         input.Link,
+				"vendors":      input.Vendors,
 				"updated_at":   time.Now().Format(time.RFC3339),
 			},
 			"$setOnInsert": bson.M{

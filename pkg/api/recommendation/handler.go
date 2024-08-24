@@ -48,8 +48,12 @@ func makeRecommendationGet(p getParams) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get coffee recommendation")
 		}
 
+		if recommendedVariety == "acai" {
+			recommendedVariety = "acaia"
+		}
+
 		// Find the description for the recommended variety
-		description := searchDescription(coffeeVarieties, recommendedVariety)
+		v := searchVariety(coffeeVarieties, recommendedVariety)
 
 		adRec, err := p.OpenAi.SuggestAdditionalVarieties(c.Request().Context(), userPreferences, recommendedVariety, coffeeVarieties)
 		if err != nil {
@@ -59,33 +63,35 @@ func makeRecommendationGet(p getParams) echo.HandlerFunc {
 
 		var ar []*opService.RecommendationStruct
 		for _, ad := range adRec {
+			v := searchVariety(coffeeVarieties, strings.TrimSpace(ad))
 			ar = append(ar, &opService.RecommendationStruct{
 				Variety:     ad,
-				Description: searchDescription(coffeeVarieties, strings.TrimSpace(ad)),
+				Description: v.Description,
+				Vendors:     v.Vendors,
 			})
 		}
 
-		// Prepare the response
-		response := &opService.CoffeeRecommendationsStruct{
+		rsp := &opService.CoffeeRecommendationsStruct{
 			Recommendation: &opService.RecommendationStruct{
 				Variety:     recommendedVariety,
-				Description: description,
+				Description: v.Description,
+				Vendors:     v.Vendors,
 			},
 			AdditionalRecommendations: ar,
 		}
 
-		return c.JSON(http.StatusOK, response)
+		return c.JSON(http.StatusOK, rsp)
 	}
 }
 
-func searchDescription(coffeeVarieties []coffeeTypes.CoffeeVariety, recommendedVariety string) coffeeTypes.Description {
-	var description coffeeTypes.Description
-	for _, variety := range coffeeVarieties {
-		if variety.Variety == recommendedVariety {
-			description = variety.Description
+func searchVariety(coffeeVarieties []coffeeTypes.CoffeeVariety, recommendedVariety string) coffeeTypes.CoffeeVariety {
+	var variety coffeeTypes.CoffeeVariety
+	for _, v := range coffeeVarieties {
+		if v.Variety == recommendedVariety {
+			variety = v
 			break
 		}
 	}
 
-	return description
+	return variety
 }
