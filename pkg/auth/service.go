@@ -7,6 +7,7 @@ import (
 
 	"coffee-choose/pkg/config"
 	"coffee-choose/pkg/service/geo"
+	"coffee-choose/pkg/utils"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 	"go.uber.org/dig"
@@ -18,19 +19,23 @@ type ServiceParams struct {
 	*config.JwtConfig
 }
 
-type CreateSessionTokenFunc func(ctx context.Context, userID string, geo *geo.Location) (string, error)
+type CreateSessionTokenFunc func(ctx context.Context, userID, clientID string, geo *geo.Location) (string, error)
 
 func makeCreateSessionToken(p ServiceParams) CreateSessionTokenFunc {
-	return func(ctx context.Context, userID string, geo *geo.Location) (string, error) {
+	return func(ctx context.Context, userID, clientID string, geo *geo.Location) (string, error) {
 		claims := &SessionToken{
 			SessionID:   uuid.New(),
 			UserID:      userID,
 			Geolocation: geo,
+			ClientID:    clientID,
 			RegisteredClaims: jwt.RegisteredClaims{
 				ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 				IssuedAt:  jwt.NewNumericDate(time.Now()),
+				NotBefore: jwt.NewNumericDate(time.Now()),
 				Issuer:    p.JwtConfig.Issuer,
+				Subject:   utils.CreateAuthSubjectForDevice(geo.Country, clientID),
 				Audience:  jwt.ClaimStrings{p.JwtConfig.Audience},
+				ID:        uuid.NewString(),
 			},
 		}
 

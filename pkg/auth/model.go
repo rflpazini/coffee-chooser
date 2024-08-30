@@ -9,8 +9,9 @@ import (
 
 //easyjson:json
 type SessionToken struct {
-	SessionID   uuid.UUID     `json:"session_id"`
-	UserID      string        `json:"user_id"`
 	Geolocation *geo.Location `json:"geolocation"`
 	jwt.RegisteredClaims
+	UserID    string    `json:"user_id"`
+	ClientID  string    `json:"client_id"`
+	SessionID uuid.UUID `json:"session_id"`
 }

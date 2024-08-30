@@ -24,6 +24,10 @@ import (
 func registration(ctx context.Context, c *dig.Container, cfg *config.Config) error {
 	register := registerContainers(c)
 
+	if err := c.Provide(auth2.Middleware, dig.Name("Route.Handler.Auth")); err != nil {
+		return err
+	}
+
 	if err := cfg.Register(register); err != nil {
 		return err
 	}

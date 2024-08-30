@@ -5,6 +5,7 @@ import "coffee-choose/pkg/service/geo"
 
 //easyjson:json
 type UserPreferences struct {
+	UserID      string       `json:"user_id" bson:"user_id"`
 	CreatedAt   string       `json:"created_at,omitempty" bson:"created_at"`
 	UpdatedAt   string       `json:"updated_at,omitempty" bson:"updated_at"`
 	Sweetness   string       `json:"sweetness" bson:"sweetness" validate:"required"`

@@ -33,9 +33,10 @@ func makeSessionTokenHandler(p makeSessionTokenHandlerParams) echo.HandlerFunc {
 		}
 
 		geolocation, _ := p.Geo.GetLocation(r.Context(), c.RealIP())
+		clientID := utils.GenerateClientID(r.UserAgent(), r.RemoteAddr, uuid.New().String())
 		sessionID := uuid.NewString()
 
-		token, err := p.CreateSessionTokenFunc(r.Context(), userID, geolocation)
+		token, err := p.CreateSessionTokenFunc(r.Context(), userID, clientID, geolocation)
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, "could not create session token")
 		}
