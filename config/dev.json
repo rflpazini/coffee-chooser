@@ -1,4 +1,9 @@
 {
+  "jwt": {
+    "secret": "Y29mZmVlIGNob29zZXIgZW52IGRldiB0ZXN0IHNlY3JldCBkb21iZW0=",
+    "audience": "*.chooser.cafe",
+    "issuer": "staging.chooser.cafe"
+  },
   "server": {
     "port": 8080,
     "appName": "coffee-chooser",

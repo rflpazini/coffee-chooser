@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"strings"
 
+	"coffee-choose/pkg/config"
 	"coffee-choose/pkg/service/coffeeTypes"
 	"coffee-choose/pkg/service/preferences"
 	"github.com/rs/zerolog/log"
 	"github.com/sashabaranov/go-openai"
+	"go.uber.org/dig"
 )
 
 type OpenAIService interface {
@@ -20,8 +22,14 @@ type openAIServiceImpl struct {
 	client *openai.Client
 }
 
-func makeOpenAIService() (OpenAIService, error) {
-	client := openai.NewClient("sk-svcacct-g8lg9FanLhXDcJlTk_bmP94mx0i4wutmb9fOeU8K3tplKgpXuBZfT3BlbkFJm0chlpz1-Cq_iB5L_mbsYVPlG4IlsRHgXv_BovKuM2yDul0wuPAA")
+type OpenAIServiceParams struct {
+	dig.In
+
+	*config.OpenAIConfig
+}
+
+func makeOpenAIService(p OpenAIServiceParams) (OpenAIService, error) {
+	client := openai.NewClient(p.OpenAIConfig.Key)
 	if client == nil {
 		log.Error().Msg("Failed to create OpenAI client")
 		return nil, fmt.Errorf("failed to create OpenAI client")

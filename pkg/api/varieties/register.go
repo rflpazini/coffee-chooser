@@ -10,13 +10,15 @@ type coffeeVarietyRoutesParams struct {
 	dig.In
 
 	*echo.Echo
-	GetAllCoffeeVarietiesHandler  echo.HandlerFunc `name:"Route.Handler.CoffeeVariety.GetAll"`
-	GetCoffeeVarietyByNameHandler echo.HandlerFunc `name:"Route.Handler.CoffeeVariety.GetByName"`
-	PostCoffeeVarietiesHandler    echo.HandlerFunc `name:"Route.Handler.CoffeeVariety.Post"`
+	GetAllCoffeeVarietiesHandler  echo.HandlerFunc    `name:"Route.Handler.CoffeeVariety.GetAll"`
+	GetCoffeeVarietyByNameHandler echo.HandlerFunc    `name:"Route.Handler.CoffeeVariety.GetByName"`
+	PostCoffeeVarietiesHandler    echo.HandlerFunc    `name:"Route.Handler.CoffeeVariety.Post"`
+	AuthMiddleware                echo.MiddlewareFunc `name:"Route.Handler.Auth"`
 }
 
 func setupCoffeeVarietyRoutes(p coffeeVarietyRoutesParams) router.RouteGroup {
 	coffeeVarietyRoutes := p.Echo.Group("/v1")
+	coffeeVarietyRoutes.Use(p.AuthMiddleware)
 
 	coffeeVarietyRoutes.GET("/varieties", p.GetAllCoffeeVarietiesHandler)
 	coffeeVarietyRoutes.GET("/varieties/:name", p.GetCoffeeVarietyByNameHandler)

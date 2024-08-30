@@ -10,11 +10,13 @@ type coffeeRoutesParams struct {
 	dig.In
 
 	*echo.Echo
-	SavePreferencesHandler echo.HandlerFunc `name:"Route.Handler.Coffee.Post"`
+	SavePreferencesHandler echo.HandlerFunc    `name:"Route.Handler.Coffee.Post"`
+	AuthMiddleware         echo.MiddlewareFunc `name:"Route.Handler.Auth"`
 }
 
 func setupCoffeeRoutes(p coffeeRoutesParams) router.RouteGroup {
 	coffeeRoutes := p.Echo.Group("/v1")
+	coffeeRoutes.Use(p.AuthMiddleware)
 
 	coffeeRoutes.POST("/preferences", p.SavePreferencesHandler)
 

@@ -7,14 +7,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"go.uber.org/dig"
 )
 
-type newEchoRouterParams struct {
-	dig.In
-}
-
-func newEchoRouter(p newEchoRouterParams) *echo.Echo {
+func newEchoRouter() *echo.Echo {
 	router := echo.New()
 	router.JSONSerializer = easyJSONSerializer{}
 
