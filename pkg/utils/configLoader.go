@@ -42,7 +42,7 @@ func NewConfig() (*config.Config, error) {
 
 	jwt := os.Getenv("JWT_KEY")
 	if jwt != "" {
-		cfg.Server.JwtSecretKey = jwt
+		cfg.JWT.Secret = jwt
 	}
 
 	return &cfg, nil

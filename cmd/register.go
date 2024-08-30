@@ -5,10 +5,12 @@ import (
 
 	"coffee-choose/internal/router"
 	"coffee-choose/internal/server"
+	auth2 "coffee-choose/pkg/api/auth"
 	"coffee-choose/pkg/api/health-check"
 	"coffee-choose/pkg/api/preferences"
 	"coffee-choose/pkg/api/recommendation"
 	"coffee-choose/pkg/api/varieties"
+	"coffee-choose/pkg/auth"
 	"coffee-choose/pkg/config"
 	"coffee-choose/pkg/database"
 	"coffee-choose/pkg/service/coffeeTypes"
@@ -35,6 +37,10 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 	}
 
 	if err := server.Register(register); err != nil {
+		return err
+	}
+
+	if err := auth.Register(register); err != nil {
 		return err
 	}
 
@@ -66,6 +72,10 @@ func registration(ctx context.Context, c *dig.Container, cfg *config.Config) err
 		return err
 	}
 	if err := varieties.Register(c, register); err != nil {
+		return err
+	}
+
+	if err := auth2.Register(c, register); err != nil {
 		return err
 	}
 

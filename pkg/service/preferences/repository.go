@@ -16,20 +16,10 @@ func makeSaveUserPreferences(coll database.PreferencesCollection, geoService geo
 	return func(ctx context.Context, p UserPreferences) (string, error) {
 		uLocation, err := geoService.GetLocation(ctx, p.IPAddress)
 		if err != nil {
-			log.Error().Err(err).Msgf("Failed to get location for IP %s", p.IPAddress)
-		} else {
-			log.Info().Msgf("Location for IP %s: %+v", p.IPAddress, uLocation)
-
-			if uLocation.City.Names["en"] != "" {
-				p.Location.City = uLocation.City.Names["en"]
-			}
-
-			p.Location.Country = uLocation.Country.IsoCode
-			p.Location.Latitude = uLocation.Location.Latitude
-			p.Location.Longitude = uLocation.Location.Longitude
-			p.Location.Timezone = uLocation.Location.TimeZone
+			log.Error().Err(err).Msg("failed to get location")
 		}
 
+		p.Location = *uLocation
 		p.CreatedAt = time.Now().Format(time.RFC3339)
 
 		res, err := coll.InsertOne(ctx, p)
