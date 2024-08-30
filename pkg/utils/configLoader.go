@@ -30,14 +30,19 @@ func NewConfig() (*config.Config, error) {
 		cfg.Mongo.URI = mongo
 	}
 
-	minds := os.Getenv("OPENAI_KEY")
-	if minds != "" {
-		cfg.OpenAI.Key = minds
+	opKey := os.Getenv("OPENAI_KEY")
+	if opKey != "" {
+		cfg.OpenAI.Key = opKey
 	}
 
 	version := os.Getenv("APP_VERSION")
 	if version != "" {
 		cfg.Server.AppVersion = version
+	}
+
+	jwt := os.Getenv("JWT_KEY")
+	if jwt != "" {
+		cfg.Server.JwtSecretKey = jwt
 	}
 
 	return &cfg, nil

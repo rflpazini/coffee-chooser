@@ -8,6 +8,7 @@ type Config struct {
 	Server *ServerConfig `json:"server"`
 	Mongo  *MongoConfig  `json:"mongo"`
 	OpenAI *OpenAIConfig `json:"openai"`
+	JWT    *JwtConfig    `json:"jwt"`
 }
 
 type ServerConfig struct {
@@ -16,7 +17,6 @@ type ServerConfig struct {
 	Port              string        `json:"port"`
 	PprofPort         string        `json:"pprofPort"`
 	Mode              string        `json:"mode"`
-	JwtSecretKey      string        `json:"jwtSecretKey"`
 	AppVersion        string        `json:"appVersion"`
 	Repository        string        `json:"repository"`
 	CtxDefaultTimeout time.Duration `json:"ctxDefaultTimeout"`
@@ -35,4 +35,10 @@ type MongoConfig struct {
 
 type OpenAIConfig struct {
 	Key string `json:"key"`
+}
+
+type JwtConfig struct {
+	Secret   string `json:"secret"`
+	Audience string `json:"audience"`
+	Issuer   string `json:"issuer"`
 }

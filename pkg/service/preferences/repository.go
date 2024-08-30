@@ -30,19 +30,6 @@ func makeSaveUserPreferences(coll database.PreferencesCollection, geoService geo
 			p.Location.Timezone = uLocation.Location.TimeZone
 		}
 
-		//filter := bson.M{
-		//	"sweetness":    p.Sweetness,
-		//	"strength":     p.Strength,
-		//	"flavor_notes": p.FlavorNotes,
-		//	"body":         p.Body,
-		//}
-
-		//var existing UserPreferences
-		//err = coll.FindOne(ctx, filter).Decode(&existing)
-		//if !errors.Is(err, mongo.ErrNoDocuments) {
-		//	return "", errors.New("preferences already exist")
-		//}
-
 		p.CreatedAt = time.Now().Format(time.RFC3339)
 
 		res, err := coll.InsertOne(ctx, p)
