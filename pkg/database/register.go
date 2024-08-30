@@ -8,5 +8,6 @@ func Register(register func(...interface{}) error) error {
 		makeMongoDisconnect,
 		makePreferencesCollection,
 		makeCoffeeVarietyCollection,
+		makeRecommendationCollection,
 	)
 }

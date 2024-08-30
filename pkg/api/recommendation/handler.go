@@ -7,6 +7,7 @@ import (
 	"coffee-choose/pkg/service/coffeeTypes"
 	opService "coffee-choose/pkg/service/openaiClient"
 	"coffee-choose/pkg/service/preferences"
+	"coffee-choose/pkg/service/recommendations"
 	"github.com/labstack/echo/v4"
 	"github.com/rs/zerolog/log"
 	"go.uber.org/dig"
@@ -17,10 +18,12 @@ type getParams struct {
 
 	CoffeeVarietyService coffeeTypes.GetAllCoffeeVarieties
 	OpenAi               opService.OpenAIService
+	SaveRecommendation   recommendations.SaveRecommendation
 }
 
 func makeRecommendationGet(p getParams) echo.HandlerFunc {
 	return func(c echo.Context) error {
+		r := c.Request()
 		// Parse query parameters
 		userPreferences := preferences.UserPreferences{
 			Sweetness:   c.QueryParam("sweetness"),
@@ -35,14 +38,14 @@ func makeRecommendationGet(p getParams) echo.HandlerFunc {
 		}
 
 		// Fetch all coffee varieties
-		coffeeVarieties, err := p.CoffeeVarietyService(c.Request().Context())
+		coffeeVarieties, err := p.CoffeeVarietyService(r.Context())
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to retrieve coffee varieties")
 			return echo.NewHTTPError(http.StatusInternalServerError, "Failed to retrieve coffee varieties")
 		}
 
 		// Call the OpenAI service to get the best match
-		recommendedVariety, err := p.OpenAi.GetCoffeeRecommendation(c.Request().Context(), userPreferences, coffeeVarieties)
+		recommendedVariety, err := p.OpenAi.GetCoffeeRecommendation(r.Context(), userPreferences, coffeeVarieties)
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to get coffee recommendation")
 			return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get coffee recommendation")
@@ -55,7 +58,21 @@ func makeRecommendationGet(p getParams) echo.HandlerFunc {
 		// Find the description for the recommended variety
 		v := searchVariety(coffeeVarieties, recommendedVariety)
 
-		adRec, err := p.OpenAi.SuggestAdditionalVarieties(c.Request().Context(), userPreferences, recommendedVariety, coffeeVarieties)
+		rsp := &opService.CoffeeRecommendationsStruct{
+			Recommendation: &opService.RecommendationStruct{
+				Variety:     recommendedVariety,
+				Description: v.Description,
+				Vendors:     v.Vendors,
+			},
+		}
+
+		_, err = p.SaveRecommendation(r.Context(), &recommendations.Recommendation{CoffeeVariety: rsp.Recommendation.Variety})
+		if err != nil {
+			log.Error().Err(err).Msg("Failed to save recommendation")
+			return err
+		}
+
+		adRec, err := p.OpenAi.SuggestAdditionalVarieties(r.Context(), userPreferences, recommendedVariety, coffeeVarieties)
 		if err != nil {
 			log.Error().Err(err).Msg("Failed to get additional coffee suggestions")
 			return echo.NewHTTPError(http.StatusInternalServerError, "Failed to get additional coffee suggestions")
@@ -71,15 +88,7 @@ func makeRecommendationGet(p getParams) echo.HandlerFunc {
 			})
 		}
 
-		rsp := &opService.CoffeeRecommendationsStruct{
-			Recommendation: &opService.RecommendationStruct{
-				Variety:     recommendedVariety,
-				Description: v.Description,
-				Vendors:     v.Vendors,
-			},
-			AdditionalRecommendations: ar,
-		}
-
+		rsp.AdditionalRecommendations = ar
 		return c.JSON(http.StatusOK, rsp)
 	}
 }

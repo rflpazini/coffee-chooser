@@ -19,7 +19,6 @@ func setupCoffeeRecommendationRoutes(p coffeeRoutesParams) router.RouteGroup {
 	coffeeRoutes.Use(p.AuthMiddleware)
 
 	coffeeRoutes.GET("/recommendation", p.GetRecommendationHandler)
-
 	return router.RouteGroup{Group: coffeeRoutes}
 }
 
