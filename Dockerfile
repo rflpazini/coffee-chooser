@@ -6,7 +6,7 @@ RUN apk add --no-cache git ca-certificates openssh-client
 RUN apk add --no-cache g++ && apk --no-cache add make
 
 FROM base as builder
-WORKDIR /go/src
+WORKDIR /app
 
 COPY go.mod go.sum Makefile ./
 
@@ -17,7 +17,7 @@ RUN --mount=type=cache,target=/root/.cache \
 COPY . ./
 RUN make build
 
-FROM scratch
+FROM alpine:latest
 WORKDIR /app
 
 ARG APP_VERSION
@@ -28,9 +28,9 @@ ENV APP_VERSION ${APP_VERSION}
 ENV MONGODB_URL ${MONGODB_URL}
 ENV BRANCH_NAME ${BRANCH_NAME}
 
-COPY --from=builder /go/src/config/ ./config/
-COPY --from=builder /go/src/scripts/ ./scripts/
-COPY --from=builder /go/src/bin/coffee-chooser .
+COPY --from=builder /app/config/ ./config/
+COPY --from=builder /app/scripts/ ./scripts/
+COPY --from=builder /app/bin/coffee-chooser .
 
 EXPOSE 8080
 EXPOSE 443
