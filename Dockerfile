@@ -17,11 +17,8 @@ RUN --mount=type=cache,target=/root/.cache \
 COPY . ./
 RUN make build
 
-FROM alpine:latest
+FROM scratch
 WORKDIR /app
-
-RUN apk -U upgrade && \
-    rm -rf /var/cache/apk/*
 
 ARG APP_VERSION
 ARG MONGODB_URL
