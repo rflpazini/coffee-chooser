@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1
 FROM golang:1.23-alpine as base
 LABEL authors="rflpazini@gmail.com"
 
@@ -17,7 +18,7 @@ RUN --mount=type=cache,target=/root/.cache \
 COPY . ./
 RUN make build
 
-FROM alpine:latest
+FROM alpine:3.20
 WORKDIR /app
 
 ARG APP_VERSION

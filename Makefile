@@ -17,9 +17,7 @@ clean:
 test:
 	go test -cover ./...
 
-# ==============================================================================
 # Modules support
-
 deps:
 	go install golang.org/x/tools/go/analysis/passes/fieldalignment/cmd/fieldalignment@latest
 	go get github.com/mailru/easyjson && go install github.com/mailru/easyjson/...@latest
@@ -38,7 +36,6 @@ deps-upgrade:
 deps-cleancache:
 	go clean -modcache
 
-# ==============================================================================
 # Tools commands
 gen: easyjson-clean \
 easyjson
